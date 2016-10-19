@@ -1,4 +1,3 @@
-
 //This class makes an object for the robot
 public class Robot {
 
@@ -17,7 +16,5 @@ public class Robot {
 		this.y = y;
 		this.theta = theta;
 	}
-	
-	
 	
 }
