@@ -2,19 +2,38 @@
 public class Robot {
 
 	//Robot characteristics
-	public double height
+	public double height;
+	public double width;
+	public double speed;
 
 	//Robot position variables
-	public double x;
-	public double y;
+	public Coordinate center;
 	public double theta;
-	public Vertex[] corners = new Vertex[4];
+	public Coordinate[] corners = new Coordinate[4];
+	public Line[] edges = new Line[4];
 
-	Robot(double x, double y, double theta)
-	{
-		this.x = x;
-		this.y = y;
-		this.theta = theta;
+	Robot(double x, double y, double theta, double height, double width, double speed) {
+		center = new Coordinate(x,y);
+		this.height = height;
+		this.width = width;
+		this.speed = speed;
+	}
+
+	public void updateCorners() {
+		double direct = Math.sqrt((height/2)*(height/2)+(width/2)*(width/2);
+		double dtheta = theta+Math.pi/4;
+		
+		corners[0].x = center.x+Math.cos(dtheta)*direct;
+		corners[0].y = center.y+Math.sin(dtheta)*direct;
+	
+		corners[1].x = center.x-Math.cos(dtheta)*direct;
+		corners[1].y = center.y+Math.sin(dtheta)*direct;
+		
+		corners[2].x = center.x-Math.cos(dtheta)*direct;
+		corners[2].y = center.y-Math.sin(dtheta)*direct;
+	
+		corners[3].x = center.x+Math.cos(dtheta)*direct;
+		corners[3].y = center.y-Math.sin(dtheta)*direct;
 	}
 	
 }
