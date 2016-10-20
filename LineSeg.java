@@ -13,6 +13,6 @@ public class LineSeg {
 		ends[1] = new Coordinate(c2.x,c2.y);
 	}
 	
-//	public boolean checkTouch()
+	public boolean checkTouch()
 	
 }
