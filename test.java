@@ -8,8 +8,11 @@ class test {
 	
 	public static void main(String args[]){
 
-		Scanner input = new Scanner(System.in); //Init scanner
-		System.out.println("Input")
+		Robot testRobot = new Robot(5, 10, 3, 100, 100, 15);
+		//Scanner input = new Scanner(System.in); //Init scanner
+		testRobot.updateCorners();
+		System.out.println(testRobot.corners[0].x+" "+testRobot.corners[0].y+" "+testRobot.corners[1].x+" "+testRobot.corners[1].y);
+		System.out.println(testRobot.corners[2].x+" "+testRobot.corners[2].y+" "+testRobot.corners[3].x+" "+testRobot.corners[3].y);
 		
 	}
 }
