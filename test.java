@@ -8,7 +8,7 @@ class test {
 	
 	public static void main(String args[]){
 
-		Robot testRobot = new Robot(5, 10, 3, 100, 100, 15);
+		Robot testRobot = new Robot(1, 2, Math.PI/8, 10, 10, 15);
 		//Scanner input = new Scanner(System.in); //Init scanner
 		testRobot.updateCorners();
 		System.out.println(testRobot.corners[0].x+" "+testRobot.corners[0].y+" "+testRobot.corners[1].x+" "+testRobot.corners[1].y);

@@ -19,23 +19,21 @@ public class Robot {
 		this.height = height;
 		this.width = width;
 		this.speed = speed;
+		this.theta = theta;
+		updateCorners();
 	}
 
+	//updates the corners of the robot based on the center position and the angle
 	public void updateCorners() {
 		double direct = Math.sqrt((height/2)*(height/2)+(width/2)*(width/2));
 		double dtheta = theta+Math.PI/4;
 		
-		corners[0].x = center.x+Math.cos(dtheta)*direct;
-		corners[0].y = center.y+Math.sin(dtheta)*direct;
-	
-		corners[1].x = center.x-Math.cos(dtheta)*direct;
-		corners[1].y = center.y+Math.sin(dtheta)*direct;
+		for(int i = 0; i < 4;i++)
+		{		
+			corners[i] = new Coordinate(center.x+Math.cos(dtheta)*direct,center.y+Math.sin(dtheta)*direct);
+			dtheta +=Math.PI/2;			
+		}
 		
-		corners[2].x = center.x-Math.cos(dtheta)*direct;
-		corners[2].y = center.y-Math.sin(dtheta)*direct;
-	
-		corners[3].x = center.x+Math.cos(dtheta)*direct;
-		corners[3].y = center.y-Math.sin(dtheta)*direct;
 	}
 	
 }
