@@ -1,7 +1,7 @@
 //This class makes an object for the robot
 import java.lang.Math.*;
 
-public class Robot {
+public class Robot{
 
 	//Robot characteristics
 	public double height;

@@ -1,5 +1,5 @@
 //This class defines the position of lines
-public class LineSeg {
+public class LineSeg{
 	public double m;
 	public double b;
 	//lines is defined as y=mx+b

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 //import java.lang.Math;
 
-class test {
+class test{
 	
 	public static void main(String args[]){
 
