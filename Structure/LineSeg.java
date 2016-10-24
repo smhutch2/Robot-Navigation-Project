@@ -1,9 +1,7 @@
-//This class defines the position of lines
 public class LineSeg {	
 
 	//This is the direction vector for the line
 	public Vector direction;
-	
 	public Coordinate ends[] = new Coordinate[2];
 	
 	LineSeg(Coordinate c1, Coordinate c2){
