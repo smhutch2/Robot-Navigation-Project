@@ -1,13 +1,13 @@
 public class Landmark{
 
-	ArrayList<Coordinate> vertices;
+	ArrayList<LineSeg> segments;
 	
 	//Array List of vertices (which are of type coordinate),
 	//these will be used to create polygons as Landmarks.
 
-	public Landmark(ArrayList<Coordinate> vertices){
+	public Landmark(ArrayList<LineSeg> segments){
 
-		this.vertices = vertices;
+		this.segments = segments;
 
 	}
 }
