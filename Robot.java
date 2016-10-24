@@ -19,23 +19,34 @@ public class Robot{
 		this.height = height;
 		this.width = width;
 		this.speed = speed;
+		this.theta = theta;
+		updateCorners();
 	}
 
+	//updates the corners of the robot based on the center position and the angle
 	public void updateCorners() {
+		//direct is the straight line from center to corner
 		double direct = Math.sqrt((height/2)*(height/2)+(width/2)*(width/2));
+		//dtheta is the angle of this line
 		double dtheta = theta+Math.PI/4;
 		
-		corners[0].x = center.x+Math.cos(dtheta)*direct;
-		corners[0].y = center.y+Math.sin(dtheta)*direct;
-	
-		corners[1].x = center.x-Math.cos(dtheta)*direct;
-		corners[1].y = center.y+Math.sin(dtheta)*direct;
+		//calculates the coordinate of that corner and then increments the angle by 90
+		for(int i = 0; i < 4;i++){		
+			corners[i] = new Coordinate(center.x+Math.cos(dtheta)*direct,center.y+Math.sin(dtheta)*direct);
+			dtheta +=Math.PI/2;			
+		}
 		
-		corners[2].x = center.x-Math.cos(dtheta)*direct;
-		corners[2].y = center.y-Math.sin(dtheta)*direct;
+		updateEdges();
+	}
 	
-		corners[3].x = center.x+Math.cos(dtheta)*direct;
-		corners[3].y = center.y-Math.sin(dtheta)*direct;
+	//updates the edges based on the corners
+	public void updateEdges() {
+
+		for(int i = 0; i < 3;i++){		
+			edges[i] = new LineSeg(corners[i],corners[i+1]);
+		}
+		edges[3] = new LineSeg(corners[3],corners[0]);
+		
 	}
 	
 }
