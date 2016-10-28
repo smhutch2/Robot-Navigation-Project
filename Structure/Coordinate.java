@@ -1,3 +1,4 @@
+package Structure;
 public class Coordinate{
 
 	public double x;

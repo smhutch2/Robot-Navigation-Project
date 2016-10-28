@@ -1,10 +1,12 @@
+package Structure;
+
 public class LineSeg {	
 
 	//This is the direction vector for the line
 	public Vector direction;
 	public Coordinate ends[] = new Coordinate[2];
 	
-	LineSeg(Coordinate c1, Coordinate c2){
+	public LineSeg(Coordinate c1, Coordinate c2){
 		ends[0] = new Coordinate(c1.x,c1.y);
 		ends[1] = new Coordinate(c2.x,c2.y);
 		setDirection();
@@ -47,6 +49,40 @@ public class LineSeg {
 		return work;
 	}
 	
+	//checks if another lineseg crosses this line seg
+	public boolean checkCross(LineSeg intersect)
+	{
+		boolean hits = false;
+		double x = 0;
+		double y = 0;
+		//checks for the cases that would cause the scalar calculate to return NaN
+		if(direction.x==0 && intersect.direction.y==0){
+			x=ends[0].x;
+			y=intersect.ends[0].y;		
+		}
+		else if(direction.y==0&&intersect.direction.x==0){
+			x=intersect.ends[0].x;
+			y=ends[0].y;			
+		}
+		//calculates the x and y for any other case
+		else{
+			double scalar1 = (intersect.direction.x*(ends[0].y-intersect.ends[0].y)-intersect.direction.y*(ends[0].x-intersect.ends[0].x))/(direction.x*intersect.direction.y-intersect.direction.x*direction.y);
+			
+			x = ends[0].x + scalar1*direction.x;
+			y = ends[0].y + scalar1*direction.y;
+		}
+		
+		System.out.println("end: x: "+ends[0].x+" y: "+ends[0].y);
+		System.out.println("direction: x: "+direction.x+" y: "+direction.y);
+		System.out.println("x: "+x+" y: "+y);
+		//System.out.println("scalar "+scalar1);	
+		
+		//checks if it is in the range and domain of the lines
+		if(inBetween(ends[0].x, ends[1].x, x) && inBetween(ends[0].y, ends[1].y, y)) hits = true;			
+		
+		return hits;		
+	}
+		
 	//checks to see if a number is in between two others
 	private boolean inBetween(double e1, double e2, double val){
 		

@@ -1,3 +1,4 @@
+package Structure;
 public class Environment{
 	
 	ArrayList<Landmark> landmarks;

@@ -1,3 +1,4 @@
+package Structure;
 public class Landmark{
 
 	ArrayList<LineSeg> segments;

@@ -1,3 +1,4 @@
+package Structure;
 //This class represents a vector
 public class Vector{
 	
