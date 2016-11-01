@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.scene.canvas.*;
 import Structure.*;
 import Robot.*;
+import java.util.ArrayList;
 //import java.lang.Math;
 
 public class testFX extends Application{

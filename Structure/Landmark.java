@@ -1,4 +1,6 @@
 package Structure;
+import java.util.ArrayList;
+
 public class Landmark{
 
 	ArrayList<LineSeg> segments;
