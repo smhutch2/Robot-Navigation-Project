@@ -1,6 +1,3 @@
-package Robot;
-import Structure.*;
-
 //This class makes an object for the robot
 package Robot;
 import java.lang.Math.*;
