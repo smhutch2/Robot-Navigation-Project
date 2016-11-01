@@ -1,10 +1,14 @@
+package Structure;
+import Robot.*;
+
 public class LineSeg {	
 
 	//This is the direction vector for the line
 	public Vector direction;
+	
 	public Coordinate ends[] = new Coordinate[2];
 	
-	LineSeg(Coordinate c1, Coordinate c2){
+	public LineSeg(Coordinate c1, Coordinate c2){
 		ends[0] = new Coordinate(c1.x,c1.y);
 		ends[1] = new Coordinate(c2.x,c2.y);
 		setDirection();

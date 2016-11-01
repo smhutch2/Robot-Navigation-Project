@@ -1,3 +1,6 @@
+package Structure;
+import Robot.*;
+
 public class Coordinate{
 
 	public double x;

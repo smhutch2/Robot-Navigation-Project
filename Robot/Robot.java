@@ -1,3 +1,6 @@
+package Robot;
+import Structure.*;
+
 //This class makes an object for the robot
 import java.lang.Math.*;
 
@@ -14,7 +17,7 @@ public class Robot{
 	public Coordinate corners[] = new Coordinate[4];
 	public LineSeg edges[] = new LineSeg[4];
 
-	Robot(double x, double y, double theta, double height, double width, double speed) {
+	public Robot(double x, double y, double theta, double height, double width, double speed) {
 		center = new Coordinate(x,y);
 		this.height = height;
 		this.width = width;
@@ -47,6 +50,5 @@ public class Robot{
 		}
 		edges[3] = new LineSeg(corners[3],corners[0]);
 		
-	}
-	
+	}	
 }
