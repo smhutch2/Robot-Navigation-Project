@@ -1,5 +1,4 @@
 package Structure;
-import Robot.*;
 
 public class Coordinate{
 

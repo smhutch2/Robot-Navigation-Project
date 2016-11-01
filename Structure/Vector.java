@@ -1,5 +1,4 @@
 package Structure;
-import Robot.*;
 
 //This class represents a vector
 public class Vector{
