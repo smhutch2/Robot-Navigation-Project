@@ -1,5 +1,8 @@
+package Robot;
+
 //This class makes an object for the robot
 import java.lang.Math.*;
+import Structure.*;
 
 public class Robot{
 
