@@ -43,8 +43,8 @@ public class Sensor{
 				Landmark mark = landmarks.get(j); //the pointer for the specific landmark
 				
 				//checks every lineseg
-				for(int k = 0; k < mark.segments.size();k++){
-					LineSeg line = mark.segments.get(k); //the pointer for specific lineseg
+				for(int k = 0; k < mark.lineSegList.size();k++){
+					LineSeg line = mark.lineSegList.get(k); //the pointer for specific lineseg
 					
 					//if there is an intersection, it adds it to newSense, if there's not it adds point
 					Coordinate intersect = lineSense.checkCross(line);

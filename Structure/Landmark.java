@@ -15,4 +15,8 @@ public class Landmark{
 		this.vertices = vertices;
 
 	}
+	
+	public Landmark(ArrayList<LineSeg> lineSegList){
+		this.lineSegList = lineSegList;
+	}
 }

@@ -57,17 +57,14 @@ public class LineSeg {
 		double y = 0;
 		//checks for the cases that would cause the scalar calculate to return NaN
 		if(direction.x==0 && intersect.direction.y==0){
-			System.out.println("here");
 			x=ends[0].x;
 			y=intersect.ends[0].y;		
 		}
-		else if(direction.y==0 && intersect.direction.x==0){
-			System.out.println("here2");			
+		else if(direction.y==0 && intersect.direction.x==0){		
 			x=intersect.ends[0].x;
 			y=ends[0].y;			
 		}
 		else if(direction.x==0&&intersect.direction.x==0){
-			System.out.println("here1");
 			if(ends[0].x==intersect.ends[0].x && inBetween(ends[0].y,ends[1].y,intersect.ends[0].y)){
 				return new Coordinate(intersect.ends[0].x,intersect.ends[0].y,true);
 			}
@@ -77,7 +74,6 @@ public class LineSeg {
 			else return new Coordinate(0,0,false);
 		}
 		else if(direction.y==0 && intersect.direction.y==0){
-			System.out.println("here1");
 			if(ends[0].y==intersect.ends[0].y && inBetween(ends[0].x,ends[1].x,intersect.ends[0].x)){
 				return new Coordinate(intersect.ends[0].x,intersect.ends[0].y,true);
 			}
