@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.scene.canvas.*;
 import Structure.*;
 import Robot.*;
+import java.util.ArrayList;
 //import java.lang.Math;
 
 public class testFX extends Application{
@@ -39,36 +40,30 @@ public class testFX extends Application{
 		l3.setStrokeWidth(5);
 		l4.setStrokeWidth(5);
 
-		System.out.println("BORK");
+		rootNode.getChildren().add(myCanvas);
+		//rootNode.getChildren().addAll(myCanvas, l1, l2, l3, l4);
+		int vertices;
 
-		rootNode.getChildren().addAll(myCanvas, l1, l2, l3, l4);
+		for(int j = 0 ; j < 1500 ; j++){
+		Random rand = new Random();
+		vertices = rand.nextInt(100);
+		vertices += 3;
 
-		int vertices = 100;
-
-		//requires vertice variable!
-		Landmark antiGreg = Environment.randomLandmark(150, 150, vertices);
-
+		Coordinate c = new Coordinate(rand.nextInt(1200), rand.nextInt(700));
+		Landmark antiGreg = Environment.randomLandmark(30, vertices, c);
 		Line[] line = new Line[vertices];
-
-		System.out.println("BORK2");
 
 
 		//turn into method!
-		for(int i = 0 ; i < vertices ; i++){
+		for(int i = 0 ; i < vertices; i++){
 
-			if(i == vertices - 1){
-				line[i] = new Line(antiGreg.coordinateList.get(i).x, antiGreg.coordinateList.get(i).y, antiGreg.coordinateList.get(0).x, antiGreg.coordinateList.get(0).y);
-				rootNode.getChildren().add(line[i]);
-				System.out.println("MEOW");
-			}
-			else{
-				line[i] = new Line(antiGreg.coordinateList.get(i).x, antiGreg.coordinateList.get(i).y, antiGreg.coordinateList.get(i+1).x, antiGreg.coordinateList.get(i+1).y); 
-				rootNode.getChildren().add(line[i]);
-				System.out.println(antiGreg.coordinateList.get(i).x +"    "+ antiGreg.coordinateList.get(i).y);
-				System.out.println("MEOW");
-			}
+			System.out.println(antiGreg.lineSegList.get(i).ends[0].x +"		"+ antiGreg.lineSegList.get(i).ends[0].y);
+			line[i] = new Line(antiGreg.lineSegList.get(i).ends[0].x, antiGreg.lineSegList.get(i).ends[0].y, antiGreg.lineSegList.get(i).ends[1].x, antiGreg.lineSegList.get(i).ends[1].y); 
+			rootNode.getChildren().add(line[i]);
 
 		}
+		}
+
 
 		stage.show();
 

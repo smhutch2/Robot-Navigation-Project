@@ -1,15 +1,18 @@
 package Structure;
-import java.util.*;
+import java.util.ArrayList;
+
 public class Landmark{
 
-	public ArrayList<LineSeg> segments;
+	public ArrayList<LineSeg> lineSegList;
+	public int vertices;
 	
 	//Array List of vertices (which are of type coordinate),
 	//these will be used to create polygons as Landmarks.
 
-	public Landmark(ArrayList<LineSeg> segments){
+	public Landmark(ArrayList<LineSeg> lineSegList, int vertices){
 
-		this.segments = segments;
+		this.lineSegList = lineSegList;
+		this.vertices = vertices;
 
 	}
 }
