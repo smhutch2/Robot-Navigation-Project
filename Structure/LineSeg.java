@@ -1,5 +1,5 @@
 package Structure;
-
+import java.lang.Math.*;
 public class LineSeg {	
 
 	//This is the direction vector for the line
@@ -50,7 +50,7 @@ public class LineSeg {
 	}
 	
 	//checks if another lineseg crosses this line seg
-	public boolean checkCross(LineSeg intersect)
+	public Coordinate checkCross(LineSeg intersect)
 	{
 		boolean hits = false;
 		double x = 0;
@@ -67,21 +67,31 @@ public class LineSeg {
 			y=ends[0].y;			
 		}
 		else if(direction.x==0&&intersect.direction.x==0){
-			if(ends[0].x==intersect.ends[0].x && (inBetween(ends[0].y,ends[1].y,intersect.ends[0].y) || inBetween(ends[0].y,ends[1].y,intersect.ends[1].y))){
-				return true;
+			System.out.println("here1");
+			if(ends[0].x==intersect.ends[0].x && inBetween(ends[0].y,ends[1].y,intersect.ends[0].y)){
+				return new Coordinate(intersect.ends[0].x,intersect.ends[0].y,true);
 			}
-			else return false;
+			else if(ends[0].x==intersect.ends[0].x && inBetween(ends[0].y,ends[1].y,intersect.ends[1].y)){
+				return new Coordinate(intersect.ends[1].x,intersect.ends[1].y,true);
+			}
+			else return new Coordinate(0,0,false);
 		}
 		else if(direction.y==0 && intersect.direction.y==0){
-			if(ends[0].y==intersect.ends[0].y && (inBetween(ends[0].x,ends[1].x,intersect.ends[0].x) || inBetween(ends[0].x,ends[1].x,intersect.ends[1].x))){
-				return true;
+			System.out.println("here1");
+			if(ends[0].y==intersect.ends[0].y && inBetween(ends[0].x,ends[1].x,intersect.ends[0].x)){
+				return new Coordinate(intersect.ends[0].x,intersect.ends[0].y,true);
 			}
-			else return false;
+			else if(ends[0].y==intersect.ends[0].y && inBetween(ends[0].x,ends[1].x,intersect.ends[1].x)){
+				return new Coordinate(intersect.ends[1].x,intersect.ends[1].y,true);
+			}
+			else return new Coordinate(0,0,false);
 		} 
 		//parallel case
-/* 		else if((direction.x/intersect.direction.x)==(direction.y/intersect.direction.y)) {
-			
-		}return false; */
+ 		else if((direction.x/intersect.direction.x)==(direction.y/intersect.direction.y)) {
+			if(checkTouch(intersect.ends[0].x, intersect.ends[0].y)) return new Coordinate(intersect.ends[0].x,intersect.ends[0].y,true);
+			else if(checkTouch(intersect.ends[1].x, intersect.ends[1].y)) return new Coordinate(intersect.ends[1].x,intersect.ends[1].y,true);
+			else return new Coordinate(0,0,false);
+		}
 		//calculates the x and y for any other case
 		else{
 			double scalar1 = (intersect.direction.x*(ends[0].y-intersect.ends[0].y)-intersect.direction.y*(ends[0].x-intersect.ends[0].x))/(direction.x*intersect.direction.y-intersect.direction.x*direction.y);
@@ -90,15 +100,24 @@ public class LineSeg {
 			y = ends[0].y + scalar1*direction.y;
 		}
 		
-		System.out.println("end: x: "+ends[0].x+" y: "+ends[0].y);
-		System.out.println("direction1: x: "+direction.x+" y: "+direction.y);
-		System.out.println("direction2: x: "+intersect.direction.x+" y: "+intersect.direction.y);		
-		System.out.println("x: "+x+" y: "+y);
+ /* 		System.out.println("First Vector:\nend1 x: "+ends[0].x+" y: "+ends[0].y);
+		System.out.println("end2: x: "+ends[1].x+" y: "+ends[1].y);
+		System.out.println("direction: x: "+direction.x+" y: "+direction.y);
+		System.out.println("Second Vector:\nend1 x: "+intersect.ends[0].x+" y: "+intersect.ends[0].y);
+		System.out.println("end2: x: "+intersect.ends[1].x+" y: "+intersect.ends[1].y);
+		System.out.println("direction: x: "+intersect.direction.x+" y: "+intersect.direction.y);	 
+		System.out.println(x+"\t"+y); */
+		
 		
 		//checks if it is in the range and domain of the lines
-		if(inBetween(ends[0].x, ends[1].x, x) && inBetween(ends[0].y, ends[1].y, y)) hits = true;			
+		//if(inBetween(ends[0].x, ends[1].x, x) && inBetween(ends[0].y, ends[1].y, y)) 
+		hits = inBetween(ends[0].x, ends[1].x, x) && inBetween(ends[0].y, ends[1].y, y) && inBetween(intersect.ends[0].x, intersect.ends[1].x, x) && inBetween(intersect.ends[0].y, intersect.ends[1].y, y);
 		
-		return hits;		
+//		System.out.println("boolean "+hits);
+//		System.out.println();
+		
+		Coordinate point = new Coordinate(x,y,hits);
+		return point;		
 	}
 		
 	//checks to see if a number is in between two others
@@ -107,10 +126,10 @@ public class LineSeg {
 		boolean work = false;
 		
 		if(e2<e1){
-			work = (val<e1&&val>e2);
+			work = (val<=e1&&val>=e2);
 		}
 		if(e2>e1){
-			work = (val>e1&&val<e2);
+			work = (val>=e1&&val<=e2);
 		}
 		if(e2==e1){
 			work = (val==e1);
@@ -118,5 +137,10 @@ public class LineSeg {
 		return work;
 	}
 	
-	
+	public double getMagnitude(){
+		double xdis = Math.abs(ends[1].x-ends[0].x);
+		double ydis = Math.abs(ends[1].y-ends[0].y);
+		double distance = Math.sqrt(xdis*xdis+ydis*ydis);
+		return distance;	
+	}
 }

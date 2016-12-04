@@ -1,6 +1,9 @@
 //This class makes an object for the robot
-package Robot;
+package RobotDir;
 import java.lang.Math.*;
+import Structure.*;
+import java.util.*;
+
 
 public class Robot{
 
@@ -8,12 +11,14 @@ public class Robot{
 	public double height;
 	public double width;
 	public double speed;
+	public Sensor mainSensor;
 
 	//Robot position variables
 	public Coordinate center;
 	public double theta;
 	public Coordinate corners[] = new Coordinate[4];
 	public LineSeg edges[] = new LineSeg[4];
+	public Coordinate newSense[];
 
 	public Robot(double x, double y, double theta, double height, double width, double speed) {
 		center = new Coordinate(x,y);
@@ -24,6 +29,17 @@ public class Robot{
 		updateCorners();
 	}
 
+	public Robot(double x, double y, double theta, double height, double width, double speed, double distance, double angleRange, double facing, Coordinate pos, double res, ArrayList<Landmark> landmarks) {
+		center = new Coordinate(x,y);
+		this.height = height;
+		this.width = width;
+		this.speed = speed;
+		this.theta = theta;
+		updateCorners();
+		newSense = new Coordinate[(int)res];
+		mainSensor = new Sensor(distance, angleRange, facing, pos, res, landmarks);
+	}	
+	
 	//updates the corners of the robot based on the center position and the angle
 	public void updateCorners() {
 		//direct is the straight line from center to corner
@@ -49,4 +65,9 @@ public class Robot{
 		edges[3] = new LineSeg(corners[3],corners[0]);
 		
 	}	
+	
+	public void readSensor()
+	{
+		mainSensor.sense(center,newSense);
+	}
 }
