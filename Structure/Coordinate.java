@@ -12,7 +12,7 @@ public class Coordinate{
 
 		this.x = x;
 		this.y = y;
-		exists =true;
+		exists = true;
 	}
 	
 	public Coordinate(double x, double y, boolean exists){
@@ -22,7 +22,7 @@ public class Coordinate{
 	}
 	
 	public void transform(Coordinate move){
-		x+=move.x;
-		y+=move.y;
+		x += move.x;
+		y += move.y;
 	}
 }

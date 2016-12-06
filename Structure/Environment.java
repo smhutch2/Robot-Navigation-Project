@@ -1,71 +1,82 @@
 package Structure;
-import Robot.*;
+
+import RobotDir.*;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Environment{
 	
-	ArrayList<Landmark> landmarks;
-	Robot robot;
-	int vertices;
-	Coordinate goalPos;
-	double width, height, posX, posY, maxSize;
+	public ArrayList<Landmark> landmarks;
+	public Robot robot;
+	public int vertices;
+	public double width, height, posX, posY, maxSize;
+	public LineSeg bottomBorder;
+	public LineSeg topBorder;
+	public LineSeg leftBorder;
+	public LineSeg rightBorder;
+	public Coordinate robotPos;
+	public Coordinate goalPos;
+	public double robotSize;
 
-	Environment(ArrayList<Landmark> landmarks, double width, double height, Robot robot){
+	//THESE VARIABLES NEED TO CHANGE WITH WIDTH AND LENGTH BUDDY!
+	public int arWidth = 10;
+	public int arHeight = 8;
 
-	this.landmarks = landmarks;
-	this.width = width;
-	this.height = height;
-	this.robot = robot;
+	public Environment(double width, double height){
 
-	Coordinate q1 = new Coordinate(0, 0);
-	Coordinate q2 = new Coordinate(width, 0);
-	Coordinate q3 = new Coordinate(0, height);
-	Coordinate q4 = new Coordinate(width, height);
+		this.landmarks = new ArrayList<>();
+		this.width = width;
+		this.height = height;
+		this.bottomBorder = new LineSeg(new Coordinate(0.0, 0.0), new Coordinate(width, 0.0));
+		this.topBorder = new LineSeg(new Coordinate(0.0, height), new Coordinate(width, height));
+		this.leftBorder = new LineSeg(new Coordinate(0.0, height), new Coordinate(0.0, 0.0));
+		this.rightBorder = new LineSeg(new Coordinate(width, height), new Coordinate(width, 0.0));
+
+		robotPos = new Coordinate(width/2, height);
+		goalPos = new Coordinate(width/2, 0);
+		robotSize = width/20;
+
+		robot = new Robot(robotPos.x, robotPos.y, 0.0, robotSize, robotSize, robotSize/5);
+		randomLandmarks();
 
 	}
 
-	public static Environment randomEnvironment(double width, double height){
+	public void randomLandmarks(){
 
-		int arWidth = 10;
-		int arHeight = 9;
 		Random rand = new Random();
 		Coordinate temp = new Coordinate(0, 0);
 		int vertices;
+		Landmark landmarkAr[][] = new Landmark[arHeight][arWidth];
 
-		Coordinate robotPos = new Coordinate(width/2, height);
-		Coordinate goalPos = new Coordinate(width/2, 0);
-		double robotSize = width/20;
+		for(int i = 0 ; i < arHeight  ; i++){
 
-		Robot robot = new Robot(robotPos.x, robotPos.y, 0.0, robotSize, robotSize, robotSize/5);
-
-		ArrayList<Landmark> landmarks = new ArrayList<>();
-
-		Landmark landmarkAr[][] = new Landmark[arWidth][arHeight];
-
-		for(int i = 0 ; i < arWidth ; i++){
-
-			for(int j = 0 ; j < arHeight ; j++){
+			for(int j = 0 ; j < arWidth ; j++){
 				
-				vertices = rand.nextInt(22) + 3;
-				temp.x = (double)j*100;
-				temp.y = ((double)i+1)*100;
-				landmarkAr[i][j] = randomLandmark(robotSize, vertices, temp);
-				landmarks.add(landmarkAr[i][j]);
-				if(i == 4){
-					landmarkAr[i][j] = null;
+
+				if(j == 4){
+				//	landmarkAr[i][j] = null;
+				}
+				else{
+					vertices = rand.nextInt(22) + 3;
+					temp.x = (double)j*100;
+					temp.y = ((double)i+1)*100;
+					landmarkAr[i][j] = randomLandmark(robotSize, vertices, temp);
+					landmarks.add(landmarkAr[i][j]);
 				}
 
 			}
 
 		}
+	}
 
-		Environment newEnvironment = new Environment(landmarks, width, height, robot);
+/*
+	public void randomLandmarksRadial(){
 
-		return newEnvironment;
+
 
 	}
+	*/
 
 	/*
 	public static Landmark randomLandmark(double maxSize, int vertices, double posX, double posY){
@@ -191,25 +202,21 @@ public class Environment{
 			}
 
 			else if(i == vertices){
-				//temp2 = new Coordinate(x, y);
-				System.out.println("C1 = "+ temp2.x +", "+ temp2.y + "	C2 = "+ temp0.x +", "+ temp0.y);
 				lineSegList.add(new LineSeg(temp2, temp0));
 			}
 
 			else{
 				temp2 = new Coordinate(x, y);
-				System.out.println("C1 = "+ temp1.x +", "+ temp1.y + "	C2 = "+ temp2.x +", "+ temp2.y);
 				lineSegList.add(new LineSeg(temp1, temp2));
 				temp1 = temp2;
 			}
 
 		}
 
-		System.out.println("Landmark size = " + lineSegList.size());
+		System.out.println(lineSegList.size());
 		landmark = new Landmark(lineSegList, vertices);
 		return landmark;
 
 	}
 
 }
-
