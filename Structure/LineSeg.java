@@ -27,21 +27,21 @@ public class LineSeg {
 		if(inBetween(ends[0].x,ends[1].x,x)&&inBetween(ends[0].y,ends[1].y,y)){
 	
 			//sees if same scalar will work for both x and y
-			double scalarx =(x-ends[0].x)/(direction.x);
-			double scalary =(y-ends[0].y)/(direction.y);
+			double scalarx = (x-ends[0].x)/(direction.x);
+			double scalary = (y-ends[0].y)/(direction.y);
 			
 			//if one part of the direction vector is zero, it needs to account for the NaN		
 			if(Double.isNaN(scalarx)){
 				if(!Double.isNaN(scalary)){
-					work =true;
+					work = true;
 				}
 			}
 			if(Double.isNaN(scalary)){
 				if(!Double.isNaN(scalarx)){
-					work =true;
+					work = true;
 				}
 			}
-			if(scalarx==scalary)
+			if(scalarx == scalary)
 			{
 				work = true;
 			}
@@ -56,34 +56,34 @@ public class LineSeg {
 		double x = 0;
 		double y = 0;
 		//checks for the cases that would cause the scalar calculate to return NaN
-		if(direction.x==0 && intersect.direction.y==0){
-			x=ends[0].x;
-			y=intersect.ends[0].y;		
+		if(direction.x == 0 && intersect.direction.y == 0){
+			x = ends[0].x;
+			y = intersect.ends[0].y;		
 		}
-		else if(direction.y==0 && intersect.direction.x==0){		
-			x=intersect.ends[0].x;
-			y=ends[0].y;			
+		else if(direction.y == 0 && intersect.direction.x == 0){		
+			x = intersect.ends[0].x;
+			y = ends[0].y;			
 		}
-		else if(direction.x==0&&intersect.direction.x==0){
+		else if(direction.x == 0 && intersect.direction.x == 0){
 			if(ends[0].x==intersect.ends[0].x && inBetween(ends[0].y,ends[1].y,intersect.ends[0].y)){
 				return new Coordinate(intersect.ends[0].x,intersect.ends[0].y,true);
 			}
-			else if(ends[0].x==intersect.ends[0].x && inBetween(ends[0].y,ends[1].y,intersect.ends[1].y)){
+			else if(ends[0].x == intersect.ends[0].x && inBetween(ends[0].y,ends[1].y,intersect.ends[1].y)){
 				return new Coordinate(intersect.ends[1].x,intersect.ends[1].y,true);
 			}
 			else return new Coordinate(0,0,false);
 		}
-		else if(direction.y==0 && intersect.direction.y==0){
-			if(ends[0].y==intersect.ends[0].y && inBetween(ends[0].x,ends[1].x,intersect.ends[0].x)){
+		else if(direction.y == 0 && intersect.direction.y == 0){
+			if(ends[0].y == intersect.ends[0].y && inBetween(ends[0].x,ends[1].x,intersect.ends[0].x)){
 				return new Coordinate(intersect.ends[0].x,intersect.ends[0].y,true);
 			}
-			else if(ends[0].y==intersect.ends[0].y && inBetween(ends[0].x,ends[1].x,intersect.ends[1].x)){
+			else if(ends[0].y == intersect.ends[0].y && inBetween(ends[0].x,ends[1].x,intersect.ends[1].x)){
 				return new Coordinate(intersect.ends[1].x,intersect.ends[1].y,true);
 			}
 			else return new Coordinate(0,0,false);
 		} 
 		//parallel case
- 		else if((direction.x/intersect.direction.x)==(direction.y/intersect.direction.y)) {
+ 		else if((direction.x/intersect.direction.x) == (direction.y/intersect.direction.y)) {
 			if(checkTouch(intersect.ends[0].x, intersect.ends[0].y)) return new Coordinate(intersect.ends[0].x,intersect.ends[0].y,true);
 			else if(checkTouch(intersect.ends[1].x, intersect.ends[1].y)) return new Coordinate(intersect.ends[1].x,intersect.ends[1].y,true);
 			else return new Coordinate(0,0,false);
@@ -106,11 +106,8 @@ public class LineSeg {
 		
 		
 		//checks if it is in the range and domain of the lines
-		//if(inBetween(ends[0].x, ends[1].x, x) && inBetween(ends[0].y, ends[1].y, y)) 
 		hits = inBetween(ends[0].x, ends[1].x, x) && inBetween(ends[0].y, ends[1].y, y) && inBetween(intersect.ends[0].x, intersect.ends[1].x, x) && inBetween(intersect.ends[0].y, intersect.ends[1].y, y);
 		
-//		System.out.println("boolean "+hits);
-//		System.out.println();
 		
 		Coordinate point = new Coordinate(x,y,hits);
 		return point;		
@@ -121,14 +118,14 @@ public class LineSeg {
 		
 		boolean work = false;
 		
-		if(e2<e1){
-			work = (val<=e1&&val>=e2);
+		if(e2 < e1){
+			work = (val <= e1 && val >= e2);
 		}
-		if(e2>e1){
-			work = (val>=e1&&val<=e2);
+		if(e2 > e1){
+			work = (val >= e1 && val <= e2);
 		}
-		if(e2==e1){
-			work = (val==e1);
+		if(e2 == e1){
+			work = (val == e1);
 		}
 		return work;
 	}
