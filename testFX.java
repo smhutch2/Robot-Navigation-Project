@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 //import java.lang.Math;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import javafx.event.*;
 
 public class testFX extends Application{
 
@@ -25,11 +29,12 @@ public class testFX extends Application{
 		double height = 1000.0;
 
    		Group rootNode = new Group();
-   		Scene myScene = new Scene(rootNode, width+50, height+50);
+   		Scene myScene = new Scene(rootNode, width, height);
 		stage.setScene(myScene);
-		Canvas myCanvas = new Canvas(width+50, height+50);
+		Canvas myCanvas = new Canvas(width, height);
 
 		Environment testEnvi = new Environment(width, height);
+		Rectangle goal = new Rectangle(testEnvi.goalPos.x, testEnvi.goalPos.y, 50, 50);
 
 		Line b1 = new Line(testEnvi.bottomBorder.ends[0].x, testEnvi.bottomBorder.ends[0].y, testEnvi.bottomBorder.ends[1].x, testEnvi.bottomBorder.ends[1].y);
 		Line b2 = new Line(testEnvi.topBorder.ends[0].x, testEnvi.topBorder.ends[0].y, testEnvi.topBorder.ends[1].x, testEnvi.topBorder.ends[1].y);
@@ -53,16 +58,24 @@ public class testFX extends Application{
 		l3.setStrokeWidth(5);
 		l4.setStrokeWidth(5);
 
-		Image roboImage = new Image("RoboImage.png");
+		Button nextStep = new Button("Next");
+
+		nextStep.relocate(0, 0);
+
+		Image roboImage = new Image("RoboImage.jpeg");
 		ImageView robotImage = new ImageView();
         robotImage.setImage(roboImage);
+        robotImage.setFitHeight(testEnvi.robot.height);
+		robotImage.setFitWidth(testEnvi.robot.width);
+
         //robotImage.setX(testEnvi.robot.corners[0].x);
         //robotImage.setY(testEnvi.robot.corners[0].y);
 
-        robotImage.setX(100.0);
-        robotImage.setY(100.0);
+        //set X and Y to robot center val
+        robotImage.setX(500);
+        robotImage.setY(500);
 
-		rootNode.getChildren().addAll(robotImage, myCanvas);
+		rootNode.getChildren().addAll(robotImage, myCanvas, goal, nextStep);
 		//rootNode.getChildren().addAll(myCanvas, l1, l2, l3, l4);
 
 		/*
@@ -101,6 +114,13 @@ public class testFX extends Application{
 
 		}
 
+		nextStep.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+            	//next iteration
+
+            }
+        });
 
 		stage.show();
 

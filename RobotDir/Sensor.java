@@ -61,18 +61,18 @@ public class Sensor{
 					//if it intersects
 					if(intersect.exists){
 						//if there is a point already for that reading
-						if(newSense[i]!=null){
+						if(newSense[i] != null){
 							LineSeg comp1 = new LineSeg(offset,intersect);
 							LineSeg comp2 = new LineSeg(offset,newSense[i]);
 							//adds the new point only if its closer
-							if(comp1.getMagnitude()<comp2.getMagnitude()) newSense[i] = intersect;
+							if(comp1.getMagnitude() < comp2.getMagnitude()) newSense[i] = intersect;
 						}
 						else newSense[i] = intersect;
 					} 
 				}
 			}
 			
-			if(newSense[i]==null)	newSense[i] = point;
+			if(newSense[i] == null)	newSense[i] = point;
 		}
 	}	
 }

@@ -33,12 +33,13 @@ public class Environment{
 		this.leftBorder = new LineSeg(new Coordinate(0.0, height), new Coordinate(0.0, 0.0));
 		this.rightBorder = new LineSeg(new Coordinate(width, height), new Coordinate(width, 0.0));
 
-		robotPos = new Coordinate(width/2, height);
-		goalPos = new Coordinate(width/2, 0);
-		robotSize = width/20;
+		this.robotPos = new Coordinate(width/2, height);
+		this.goalPos = new Coordinate(width/2, 0);
+		this.robotSize = width/20;
 
-		robot = new Robot(robotPos.x, robotPos.y, 0.0, robotSize, robotSize, robotSize/5);
-		randomLandmarks();
+		this.robot = new Robot(robotPos.x, robotPos.y, 0.0, robotSize, robotSize, robotSize/5);
+		//randomLandmarks();
+		randomLandmarksRadial();
 
 	}
 
@@ -70,13 +71,51 @@ public class Environment{
 		}
 	}
 
-/*
 	public void randomLandmarksRadial(){
 
+		Random angle = new Random();
+		Random vertices = new Random();
 
+		double theta;
+		double radius;
+		int vertice;
+		double x, y;
+		double spacing = 2 * robotSize;
+		double spacingAngle;
+		int j, i;
+		int layers = 5;
 
+		System.out.println("In Rand Rad!");
+
+		for(j = 0 ; j < layers ; j++){
+
+			radius = (j * 200) + 100;
+			spacingAngle = spacing / radius;
+			//theta = angle.nextDouble() * Math.PI;
+			theta = spacingAngle;
+
+			System.out.println(radius+" Layer Loop " + Math.floor((Math.PI - theta) * radius / spacing));
+			
+			int landmarkAmount = (int)Math.floor((Math.PI - theta) * radius / spacing);
+
+			for(i = 0 ; i < landmarkAmount ; i++){
+
+				System.out.println("LM Loop");
+
+				vertice = vertices.nextInt(17) + 3;
+				y = Math.sin(theta) * radius;
+				x = Math.cos(theta) * radius + width/2;
+				Coordinate xy = new Coordinate(x, y);
+				landmarks.add(randomLandmark(robotSize/2, vertice, xy));
+				theta += spacingAngle;
+
+				System.out.println(x+ "  " +y);
+
+			}
+
+		}
 	}
-	*/
+
 
 	/*
 	public static Landmark randomLandmark(double maxSize, int vertices, double posX, double posY){
@@ -213,7 +252,7 @@ public class Environment{
 
 		}
 
-		System.out.println(lineSegList.size());
+		//System.out.println(lineSegList.size());
 		landmark = new Landmark(lineSegList, vertices);
 		return landmark;
 
