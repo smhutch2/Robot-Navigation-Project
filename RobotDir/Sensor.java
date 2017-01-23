@@ -23,10 +23,17 @@ public class Sensor{
 	}
 	
 	//fills newSense with coordinates of the sensor reading
-	public void sense(Coordinate center, Coordinate newSense[]){
+	public void sense(Coordinate center, double theta, Coordinate newSense[]){
+		//clear newSense
+		for(int i = 0; i < res; i++){
+			newSense[i] = null;
+		}	
+		
+		//variables
 		LineSeg values[] = new LineSeg[(int)res];
 		double angleInc = (angleRange*2)/(res-1);
-		double currentAngle = facing-angleRange;
+		double direction = theta + facing;
+		double currentAngle = direction-angleRange;
 		Coordinate offset = new Coordinate(0,0);
 		offset.x = pos.x;
 		offset.y = pos.y;
@@ -34,9 +41,12 @@ public class Sensor{
 		
 		//creates a lineseg for each increment and sees if there is contact
 		for(int i =0;i<res;i++){
-			double angle=facing-angleRange+angleInc*i; //the angle of the current lineseg
-			Coordinate point = new Coordinate(Math.cos(angle)*distance+offset.x, Math.sin(angle)*distance+offset.y); //the point at the end of the lineSeg
+			double angle=direction-angleRange+angleInc*i; //the angle of the current lineseg
+			double xcoor = Math.cos(angle)*distance+offset.x;
+			double ycoor = Math.sin(angle)*distance+offset.y;
+			Coordinate point = new Coordinate(xcoor,ycoor); //the point at the end of the lineSeg
 			LineSeg lineSense = new LineSeg(offset, point); //uses the point and the origin point to make lineseg			
+			
 			
 			//checks every landmark
 			for(int j = 0; j < landmarks.size(); j++){
