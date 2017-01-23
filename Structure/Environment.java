@@ -31,13 +31,14 @@ public class Environment{
 		this.leftBorder = new LineSeg(new Coordinate(0.0, height), new Coordinate(0.0, 0.0));
 		this.rightBorder = new LineSeg(new Coordinate(width, height), new Coordinate(width, 0.0));
 
-		this.robotPos = new Coordinate(width/2, height);
+		this.robotPos = new Coordinate(500, 600);
 		this.goalPos = new Coordinate(width/2, 0);
 		this.robotSize = width/20;
 
-		this.robot = new Robot(robotPos.x, robotPos.y, 0.0, robotSize, robotSize, robotSize/5);
+		
 		//randomLandmarks();
 		randomLandmarksRadial();
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/5, Math.PI/10, 50.0d, Math.PI/2, 0.0d, new Coordinate(0, 0), 11.0d, landmarks, goalPos);
 
 	}
 

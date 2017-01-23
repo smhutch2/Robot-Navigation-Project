@@ -21,9 +21,9 @@ import javafx.event.*;
 
 public class testFX extends Application{
 
-	public int i;
-	public ArrayList<Coordinate> coordList;
-	public ArrayList<Double> angleList;
+	public int i = 0;
+	public ArrayList<Coordinate> coordList = new ArrayList();
+	public ArrayList<Double> angleList = new ArrayList();
 
 	//image representing the robot
 	public Image roboImage = new Image("RoboImage.jpeg");
@@ -43,6 +43,7 @@ public class testFX extends Application{
 
 		//new environment created
 		Environment testEnvi = new Environment(width, height);
+		testEnvi.robot.navigate();
 		Rectangle goal = new Rectangle(testEnvi.goalPos.x, testEnvi.goalPos.y, 50, 50);
 
 
@@ -99,10 +100,8 @@ public class testFX extends Application{
 
 		}
 
-
-
-		
-		Robot.navigate(coordList, angleList);
+		coordList = testEnvi.robot.steps;
+		angleList = testEnvi.robot.angles;
 
 		//button handler
 		nextStep.setOnAction(new EventHandler<ActionEvent>() {
@@ -126,8 +125,8 @@ public class testFX extends Application{
 
        		robotImage.setX(coordList.get(step).x);
         	robotImage.setY(coordList.get(step).y);
-        	robotImage.setRotate((180/Math.PI)*angleList.get(step));
-        	rootNode.getChildren().add(robotImage);
+        	robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);
+        	//rootNode.getChildren().add(robotImage);
 
     }
 }
