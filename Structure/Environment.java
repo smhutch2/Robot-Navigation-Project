@@ -18,8 +18,6 @@ public class Environment{
 	public Coordinate robotPos;
 	public Coordinate goalPos;
 	public double robotSize;
-
-	//THESE VARIABLES NEED TO CHANGE WITH WIDTH AND LENGTH BUDDY!
 	public int arWidth = 10;
 	public int arHeight = 8;
 
@@ -43,6 +41,7 @@ public class Environment{
 
 	}
 
+	//this environment creates randomly generated landmarks in a grid-like pattern
 	public void randomLandmarks(){
 
 		Random rand = new Random();
@@ -71,6 +70,7 @@ public class Environment{
 		}
 	}
 
+	//this is another random enironment creator using radial patterns. This allows for the environment to have a solution but still be generated randomly
 	public void randomLandmarksRadial(){
 
 		Random angle = new Random();
@@ -87,7 +87,7 @@ public class Environment{
 
 		System.out.println("In Rand Rad!");
 
-		for(j = 0 ; j < layers ; j++){
+		for(j = 1 ; j < layers ; j++){
 
 			radius = (j * 200) + 100;
 			spacingAngle = spacing / radius;
@@ -117,103 +117,7 @@ public class Environment{
 	}
 
 
-	/*
-	public static Landmark randomLandmark(double maxSize, int vertices, double posX, double posY){
-
-		Random x = new Random();
-		Random y = new Random();
-		Random size = new Random();
-		boolean check = false;
-		Coordinate temp = new Coordinate(0.0, 0.0);
-		LineSeg tempL;
-
-		double sizeVal = size.nextInt((int)maxSize / 2);
-		sizeVal += maxSize / 2.0;
-
-		ArrayList<LineSeg> lineSegList = new ArrayList<>();
-
-		for(int i = 0 ; i < vertices ; i++){
-
-			System.out.println("WHAT ARE THOSE!?");
-
-			if(i == 0){
-
-				double xVal = x.nextInt((int)sizeVal);
-				double yVal = y.nextInt((int)sizeVal);
-
-				yVal += posY;
-				xVal += posX;
-				temp = new Coordinate(xVal, yVal);
-
-			}
-			else{
-				System.out.println("CHEESE 1");
-				check = false;
-				while(check == false){
-
-					System.out.println("CHEESE 2");
-					double xVal = x.nextInt((int)sizeVal);
-					double yVal = y.nextInt((int)sizeVal);
-
-					xVal += posX;
-					yVal += posY;
-
-					tempL = new LineSeg(temp, new Coordinate(xVal, yVal));
-
-					if(i == 1){
-						System.out.println("here!");
-						lineSegList.add(tempL);
-						temp.x = xVal;
-						temp.y = yVal;
-						check = true;
-					}
-
-					//PROBLEMS
-					if else(i == vertices){
-
-						double xVal = x.nextInt((int)sizeVal);
-						double yVal = y.nextInt((int)sizeVal);
-
-						xVal += posX;
-						yVal += posY;
-
-						tempL = new LineSeg(new Coordinate(xVal, yVal), )
-
-						for(int j = 1 ; j < i ; j++){
-							if(tempL.checkCross(lineSegList.get(j-1))) work = false;
-						}
-						if(work){
-							lineSegList.add(tempL);
-							check = true;
-						}
-
-
-					}
-					else{
-						boolean work = true;
-						for(int j = 1 ; j < i ; j++){
-							System.out.println("here!2");
-							if(tempL.checkCross(lineSegList.get(j-1))) work = false;
-						}
-						if(work){
-							System.out.println("here!3!");
-							lineSegList.add(tempL);
-							temp.x = xVal;
-							temp.y = yVal;
-							check = true;
-						}
-					}
-				}
-			}
-		}
-
-		Landmark landmarks = new Landmark(lineSegList, vertices);
-
-		return landmarks;
-
-	}
-	*/
-
+	//creates a random landmark with a set position, size and amount of vertices
 	public static Landmark randomLandmark(double maxSize, int vertices, Coordinate position){
 
 		double angle = 0.0;

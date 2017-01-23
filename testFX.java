@@ -21,6 +21,14 @@ import javafx.event.*;
 
 public class testFX extends Application{
 
+	public int i;
+	public ArrayList<Coordinate> coordList;
+	public ArrayList<Double> angleList;
+
+	//image representing the robot
+	public Image roboImage = new Image("RoboImage.jpeg");
+	public ImageView robotImage = new ImageView();
+
 	public void start(Stage stage){
 
 		stage.setTitle("JavaFX Window");
@@ -33,9 +41,12 @@ public class testFX extends Application{
 		stage.setScene(myScene);
 		Canvas myCanvas = new Canvas(width, height);
 
+		//new environment created
 		Environment testEnvi = new Environment(width, height);
 		Rectangle goal = new Rectangle(testEnvi.goalPos.x, testEnvi.goalPos.y, 50, 50);
 
+
+		//all these lines are just the borders of the environment
 		Line b1 = new Line(testEnvi.bottomBorder.ends[0].x, testEnvi.bottomBorder.ends[0].y, testEnvi.bottomBorder.ends[1].x, testEnvi.bottomBorder.ends[1].y);
 		Line b2 = new Line(testEnvi.topBorder.ends[0].x, testEnvi.topBorder.ends[0].y, testEnvi.topBorder.ends[1].x, testEnvi.topBorder.ends[1].y);
 		Line b3 = new Line(testEnvi.leftBorder.ends[0].x, testEnvi.leftBorder.ends[0].y, testEnvi.leftBorder.ends[1].x, testEnvi.leftBorder.ends[1].y);
@@ -58,48 +69,22 @@ public class testFX extends Application{
 		l3.setStrokeWidth(5);
 		l4.setStrokeWidth(5);
 
+		//button for next iteration
 		Button nextStep = new Button("Next");
 
 		nextStep.relocate(0, 0);
 
-		Image roboImage = new Image("RoboImage.jpeg");
-		ImageView robotImage = new ImageView();
-        robotImage.setImage(roboImage);
-        robotImage.setFitHeight(testEnvi.robot.height);
+		//image representing the robot
+		robotImage.setImage(roboImage);
+		robotImage.setFitHeight(testEnvi.robot.height);
 		robotImage.setFitWidth(testEnvi.robot.width);
-
-        //robotImage.setX(testEnvi.robot.corners[0].x);
-        //robotImage.setY(testEnvi.robot.corners[0].y);
 
         //set X and Y to robot center val
         robotImage.setX(500);
         robotImage.setY(500);
 
 		rootNode.getChildren().addAll(robotImage, myCanvas, goal, nextStep);
-		//rootNode.getChildren().addAll(myCanvas, l1, l2, l3, l4);
-
-		/*
-		for(int j = 0 ; j < 10 ; j++){
-
-			Random rand = new Random();
-			vertices = rand.nextInt(20);
-			vertices += 300;
-
-			Coordinate c = new Coordinate(rand.nextInt(1200), rand.nextInt(700));
-			Landmark antiGreg = Environment.randomLandmark(300, vertices, c);
-			Line[] line = new Line[vertices];
-
-
-		//turn into method!
-			for(int i = 0 ; i < vertices; i++){
-
-				System.out.println(antiGreg.lineSegList.get(i).ends[0].x +"		"+ antiGreg.lineSegList.get(i).ends[0].y);
-				line[i] = new Line(antiGreg.lineSegList.get(i).ends[0].x, antiGreg.lineSegList.get(i).ends[0].y, antiGreg.lineSegList.get(i).ends[1].x, antiGreg.lineSegList.get(i).ends[1].y); 
-				rootNode.getChildren().add(line[i]);
-
-			}
-		}
-		*/
+		
 
 		Line[] line = new Line[testEnvi.landmarks.size()];
 
@@ -114,15 +99,35 @@ public class testFX extends Application{
 
 		}
 
+
+
+		
+		Robot.navigate(coordList, angleList);
+
+		//button handler
 		nextStep.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-            	//next iteration
+            	final int a = i;
+            	printNextStep(a, rootNode);
+            	System.out.println("Step: " + i);
+            	i++;
 
             }
         });
 
+
 		stage.show();
 
 	}
+
+	//printing the solution
+	public void printNextStep(int step, Group rootNode){
+
+       		robotImage.setX(coordList.get(step).x);
+        	robotImage.setY(coordList.get(step).y);
+        	robotImage.setRotate((180/Math.PI)*angleList.get(step));
+        	rootNode.getChildren().add(robotImage);
+
+    }
 }
