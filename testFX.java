@@ -18,9 +18,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.event.*;
+import javafx.animation.AnimationTimer;
+import javafx.animation.*;
 
 public class testFX extends Application{
 
+	public double width = 1000.0;
+	public double height = 1000.0;
 	public int i = 0;
 	public ArrayList<Coordinate> coordList = new ArrayList();
 	public ArrayList<Double> angleList = new ArrayList();
@@ -33,8 +37,7 @@ public class testFX extends Application{
 
 		stage.setTitle("JavaFX Window");
 
-    	double width = 1000.0;
-		double height = 1000.0;
+ 
 
    		Group rootNode = new Group();
    		Scene myScene = new Scene(rootNode, width, height);
@@ -70,10 +73,7 @@ public class testFX extends Application{
 		l3.setStrokeWidth(5);
 		l4.setStrokeWidth(5);
 
-		//button for next iteration
-		Button nextStep = new Button("Next");
-
-		nextStep.relocate(0, 0);
+		
 
 		//image representing the robot
 		robotImage.setImage(roboImage);
@@ -82,9 +82,11 @@ public class testFX extends Application{
 
         //set X and Y to robot center val
         robotImage.setX(500);
-        robotImage.setY(500);
+        robotImage.setY(600);
+        robotImage.setLayoutX(-testEnvi.robot.width/2);
+        robotImage.setLayoutY(-testEnvi.robot.height/2);
 
-		rootNode.getChildren().addAll(robotImage, myCanvas, goal, nextStep);
+		rootNode.getChildren().addAll(robotImage, myCanvas, goal);
 		
 
 		Line[] line = new Line[testEnvi.landmarks.size()];
@@ -103,7 +105,16 @@ public class testFX extends Application{
 		coordList = testEnvi.robot.steps;
 		angleList = testEnvi.robot.angles;
 
-		//button handler
+		//buttons for iteration navigation
+		Button nextStep = new Button("Next");
+		Button prevStep = new Button("Back");
+
+		nextStep.relocate(0, 0);
+		prevStep.relocate(0, 50);
+
+		rootNode.getChildren().addAll(nextStep, prevStep);
+
+		//button handlers
 		nextStep.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
@@ -115,6 +126,36 @@ public class testFX extends Application{
             }
         });
 
+        prevStep.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+            	final int a = i;
+            	printNextStep(a, rootNode);
+            	System.out.println("Step: " + i);
+            	i--;
+
+            }
+        });
+
+
+        new AnimationTimer(){
+
+        	long last = 0;
+        	int count = 0;
+        	//System.out.println("inside timer");
+
+        	public void handle(long currentNanoTime){
+        		
+        		if((currentNanoTime-last) >= 10000){
+        			System.out.println("inside handle");
+        			count++;
+        			printNextStep(count,rootNode);
+        			last = currentNanoTime;
+        		}
+        		
+        	}	
+        }.start();
+
 
 		stage.show();
 
@@ -123,10 +164,15 @@ public class testFX extends Application{
 	//printing the solution
 	public void printNextStep(int step, Group rootNode){
 
-       		robotImage.setX(coordList.get(step).x);
-        	robotImage.setY(coordList.get(step).y);
+			double x = coordList.get(step).x;
+			double y = coordList.get(step).y;
+       		robotImage.setX(x);
+        	robotImage.setY(y);
         	robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);
-        	//rootNode.getChildren().add(robotImage);
+        	Circle prevPos = new Circle(x, y, width/200);
+        	prevPos.toBack();
+        	rootNode.getChildren().add(prevPos);
+        	robotImage.toFront();
 
     }
 }

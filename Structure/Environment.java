@@ -31,14 +31,15 @@ public class Environment{
 		this.leftBorder = new LineSeg(new Coordinate(0.0, height), new Coordinate(0.0, 0.0));
 		this.rightBorder = new LineSeg(new Coordinate(width, height), new Coordinate(width, 0.0));
 
-		this.robotPos = new Coordinate(500, 600);
+		this.robotPos = new Coordinate(500, 650);
 		this.goalPos = new Coordinate(width/2, 0);
 		this.robotSize = width/20;
 
 		
 		//randomLandmarks();
 		randomLandmarksRadial();
-		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/5, Math.PI/10, width/20, Math.PI/2, 0.0d, new Coordinate(0, 0), 11.0d, landmarks, goalPos);
+		
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/20, robotSize, Math.PI, 0.0d, new Coordinate(0, 0), 21.0d, landmarks, goalPos);
 
 	}
 
@@ -84,7 +85,7 @@ public class Environment{
 		double spacing = 4 * robotSize;
 		double spacingAngle;
 		int j, i;
-		int layers = 5;
+		int layers = 3;
 
 		System.out.println("In Rand Rad!");
 

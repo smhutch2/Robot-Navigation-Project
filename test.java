@@ -34,7 +34,10 @@ class test {
 //		testRobot.turnDes();
 //		System.out.println("Next place is: "+"x: "+testRobot.nextPos().x+" y: "+testRobot.nextPos().y);
 	//	testRobot.iterate(new Coordinate(0,0));
-		ArrayList<Coordinate> steps = new ArrayList();
+		
+		testRobot.readSensor
+	
+	/* 		ArrayList<Coordinate> steps = new ArrayList();
 		ArrayList<Double> angles = new ArrayList();
 		testRobot.navigate();
 		steps = testRobot.steps;
@@ -44,7 +47,7 @@ class test {
 			Coordinate point = steps.get(i);
 			double angle = angles.get(i);
 			System.out.println(point.x+"\t"+point.y+"\t"+angle);
-		}
+		} */
 /* 		boolean there = false;
 		
 		while(there == false){
