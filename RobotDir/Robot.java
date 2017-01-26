@@ -14,6 +14,8 @@ public class Robot{
 	public double turnspeed;
 	public Sensor mainSensor;
 	public double range;
+	public double angleRange;
+	public double res;
 
 	//Robot position variables
 	public Coordinate center;
@@ -30,6 +32,7 @@ public class Robot{
 	
 	//Navigate Variables
 	public double turnRange;
+	ArrayList<Coordinate> hits = new ArrayList();
 	public long its;
 
 	public Robot(double x, double y, double theta, double height, double width, double speed, double turnspeed, ArrayList<Landmark> landmarks, Coordinate GoalPos) {
@@ -54,12 +57,36 @@ public class Robot{
 		this.turnspeed = turnspeed;
 		this.goalPos = goalPos;
 		this.range = range;
+		this.angleRange = angleRange;
+		this.res = res;
 		updateCorners();
 		newSense = new Coordinate[(int)res];
 		mainSensor = new Sensor(range, angleRange, facing, pos, res, landmarks);
 		steps = new ArrayList();
 		angles = new ArrayList();
 	}	
+	
+	//checks to make sure the gap is wide enough
+/* 	public boolean checkGap(Coordinate reading, int index){
+		if(newSense != null){
+			double angle = Math.PI; 
+			double tempangle = Math.PI;
+			boolean there = false;
+			double length =0;
+			for(int i = 0; i < newSense.size;i++){			
+				length = distance(newSense[i],center);
+				if(length<range){
+					tempangle = (angleRange/res)*Math.abs(index-i);
+					there = true;
+					if(tempangle < angle) angle = tempangle;
+				}
+			}
+			double width = Math.sin(tempangle)*length;
+			if(there == false){
+				return true;
+			}
+		}
+	} */
 	
 	//updates the corners of the robot based on the center position and the angle
 	public void updateCorners() {
@@ -184,6 +211,7 @@ public class Robot{
 		return true;
 	} 
 	
+	//this reverses failed contact
 	public boolean reverse(Coordinate point){
 		if(distance(center,point)<0.00001) return true;
 		theta = Math.atan2((point.y-center.y),(point.x-center.x));
@@ -198,18 +226,20 @@ public class Robot{
 		return true;		
 	}
 
+	//turns robot to face destination
 	public boolean turnDes(){
 		double heading = Math.atan2((goalPos.y-center.y),(goalPos.x-center.x));
 		boolean there = false;
 		if(distance(center,goalPos)<0.00001) return true;
 		while(!there){
 			there = rotate(heading);
+			save();
 			if(checkContact()) return false;
 		}
 		return true;
 	} 
 	
-	//recursive this
+	//finds sensor reading to go to
  	public Coordinate nextPos(){
 		readSensor();
 		Coordinate next = newSense[(int)(newSense.length/2)];
@@ -231,29 +261,36 @@ public class Robot{
 		return next;
 	} 
 	
-
+	//this is the recursive method that navigates towards the destination
 	public boolean iterate(Coordinate locate){
 		its++;
 
+		//if its at the destination it will bubble back up
 		if(distance(center,goalPos)<0.00001) return true;
-		
+
+		//tries to go toward position given, and returns false it if fails
 		if(!goPos(locate)){
 			System.out.println("here5");
 			return false;
 		} 
+		
+		//tries to turn, returns false if fails
 		if(!turnDes()){
 			System.out.println("here6");			
 			return false;
 		}	
  
+		//fill newSense array
 		readSensor();
 
-				
-		if(distance(newSense[(int)(newSense.length/2)],center) > distance(goalPos,center)){
+		//if it is closer to destination than sensor range, 
+		if(range > distance(goalPos,center)){
 			System.out.println("here2");
 			return goPos(new Coordinate(goalPos.x,goalPos.y));
 		} 
 		
+		//error 3,5,1
+		//the following code runs a loop that tries different points, this is essential to recursion
 		Coordinate current = newSense[(int)(newSense.length/2)];
 		int index = (int)(newSense.length/2);
 		for(int i = 0; i < (int)(newSense.length/2)+1; i++){
@@ -280,16 +317,19 @@ public class Robot{
 		return false;
 	}
 	
+	//calculates the distance between coordinates
  	public double distance(Coordinate c1, Coordinate c2){
 		LineSeg length = new LineSeg(c1,c2);
 		return length.getMagnitude();		
 	}
 	
+	//calls the recursive method to navigate
 	public void navigate(){
 		iterate(center);
 
 	}
 	
+	//saves a position so that it can be illustrated later
 	public void save(){
 		Coordinate temp = new Coordinate(center.x, center.y);
 		steps.add(temp);

@@ -38,7 +38,7 @@ public class Environment{
 		
 		//randomLandmarks();
 		randomLandmarksRadial();
-		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/5, Math.PI/10, 50.0d, Math.PI/2, 0.0d, new Coordinate(0, 0), 11.0d, landmarks, goalPos);
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/5, Math.PI/10, width/20, Math.PI/2, 0.0d, new Coordinate(0, 0), 11.0d, landmarks, goalPos);
 
 	}
 
@@ -81,7 +81,7 @@ public class Environment{
 		double radius;
 		int vertice;
 		double x, y;
-		double spacing = 2 * robotSize;
+		double spacing = 4 * robotSize;
 		double spacingAngle;
 		int j, i;
 		int layers = 5;
@@ -107,7 +107,7 @@ public class Environment{
 				y = Math.sin(theta) * radius;
 				x = Math.cos(theta) * radius + width/2;
 				Coordinate xy = new Coordinate(x, y);
-				landmarks.add(randomLandmark(robotSize/2, vertice, xy));
+				landmarks.add(randomLandmark(robotSize, vertice, xy)); // I changed this here but it should be a variable
 				theta += spacingAngle;
 
 				System.out.println(x+ "  " +y);
