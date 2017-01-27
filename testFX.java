@@ -30,7 +30,7 @@ public class testFX extends Application{
 	public ArrayList<Double> angleList = new ArrayList();
 
 	//image representing the robot
-	public Image roboImage = new Image("RoboImage.jpeg");
+	public Image roboImage = new Image("RoboImage2.jpg");
 	public ImageView robotImage = new ImageView();
 
 	public void start(Stage stage){
@@ -163,16 +163,17 @@ public class testFX extends Application{
 
 	//printing the solution
 	public void printNextStep(int step, Group rootNode){
-
-			double x = coordList.get(step).x;
-			double y = coordList.get(step).y;
-       		robotImage.setX(x);
-        	robotImage.setY(y);
-        	robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);
-        	Circle prevPos = new Circle(x, y, width/200);
-        	prevPos.toBack();
-        	rootNode.getChildren().add(prevPos);
-        	robotImage.toFront();
+			if(step<coordList.size()){
+				double x = coordList.get(step).x;
+				double y = coordList.get(step).y;
+				robotImage.setX(x);
+				robotImage.setY(y);
+				robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);
+				Circle prevPos = new Circle(x, y, width/500);
+				prevPos.toBack();
+				rootNode.getChildren().add(prevPos);
+				robotImage.toFront();
+			}
 
     }
 }
