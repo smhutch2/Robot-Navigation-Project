@@ -48,7 +48,7 @@ public class testFX extends Application{
 		//new environment created
 		Environment testEnvi = new Environment(width, height);
 		testEnvi.robot.navigate();
-		Rectangle goal = new Rectangle(testEnvi.goalPos.x - 25, testEnvi.goalPos.y, 50, 50);
+		Rectangle goal = new Rectangle(testEnvi.goalPos.x - 25, testEnvi.goalPos.y - 25, 50, 50);
 		goal.setFill(Color.RED);
 
 
@@ -172,7 +172,7 @@ public class testFX extends Application{
        		robotImage.setX(x);
         	robotImage.setY(y);
         	robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);
-        	Circle prevPos = new Circle(x, y, width/200);
+        	Circle prevPos = new Circle(x, y, width/400);
         	prevPos.toBack();
         	rootNode.getChildren().add(prevPos);
         	robotImage.toFront();

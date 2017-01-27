@@ -23,6 +23,7 @@ public class Environment{
 
 	public Environment(double width, double height){
 
+		ArrayList<LineSeg> borderSegList = new ArrayList();
 		this.landmarks = new ArrayList<>();
 		this.width = width;
 		this.height = height;
@@ -31,17 +32,26 @@ public class Environment{
 		this.leftBorder = new LineSeg(new Coordinate(0.0, height), new Coordinate(0.0, 0.0));
 		this.rightBorder = new LineSeg(new Coordinate(width, height), new Coordinate(width, 0.0));
 
+		borderSegList.add(bottomBorder);
+		borderSegList.add(topBorder);
+		borderSegList.add(leftBorder);
+		borderSegList.add(rightBorder);
+
 		Random posRand = new Random();
 		//robotPos had preset val for x, now random
 		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 650);
 		//was width/2 for goalPos x val, now random
-		this.goalPos = new Coordinate(posRand.nextInt(400) + 300, 0);
+		this.goalPos = new Coordinate(posRand.nextInt(400) + 300, 50);
 		this.robotSize = width/20;
+
+
+		Landmark borderLandmark = new Landmark(borderSegList, borderSegList.size());
+		landmarks.add(borderLandmark);
 
 		
 		//randomLandmarks();
 		randomLandmarksRadialV2();
-		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/20, Math.PI/40, robotSize, Math.PI, 0.0d, new Coordinate(0, 0), 19.0d, landmarks, goalPos);
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/50, Math.PI/40, robotSize, Math.PI, 0.0d, new Coordinate(0, 0), 21.0d, landmarks, goalPos);
 		System.out.println("Here " + landmarks.size());
 
 	}
@@ -139,6 +149,7 @@ public class Environment{
 
 		for(j = 1 ; j < layers ; j++){
 
+			spacingAngle = 0;
 			theta = 0;
 			radius = (j * 150) + 100;
 			System.out.println("Layer Loop: " + j);			
@@ -148,7 +159,7 @@ public class Environment{
 
 			for(i = 0 ; i < landmarkAmount ; i++){
 
-				System.out.println("LM Loop: " + i);
+				System.out.println("LM Loop: " + i + "     Angle Sum: " + spacingAngle);
 
 				vertice = vertices.nextInt(17) + 3;
 				theta = (angle.nextInt(150) + 50)/radius;
