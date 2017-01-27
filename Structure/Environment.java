@@ -24,6 +24,7 @@ public class Environment{
 	public Environment(double width, double height){
 
 		ArrayList<LineSeg> borderSegList = new ArrayList();
+		Random posRand = new Random();
 		this.landmarks = new ArrayList<>();
 		this.width = width;
 		this.height = height;
@@ -37,7 +38,6 @@ public class Environment{
 		borderSegList.add(leftBorder);
 		borderSegList.add(rightBorder);
 
-		Random posRand = new Random();
 		//robotPos had preset val for x, now random
 		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 650);
 		//was width/2 for goalPos x val, now random
@@ -48,11 +48,8 @@ public class Environment{
 		Landmark borderLandmark = new Landmark(borderSegList, borderSegList.size());
 		landmarks.add(borderLandmark);
 
-		
-		//randomLandmarks();
 		randomLandmarksRadialV2();
-		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/50, Math.PI/40, robotSize, Math.PI, 0.0d, new Coordinate(0, 0), 21.0d, landmarks, goalPos);
-		System.out.println("Here " + landmarks.size());
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/40, robotSize*1.5, Math.PI, 0.0d, new Coordinate(0, 0), 17.0d, landmarks, goalPos);
 
 	}
 
@@ -130,6 +127,7 @@ public class Environment{
 
 		}
 	}
+
 
 	public void randomLandmarksRadialV2(){
 

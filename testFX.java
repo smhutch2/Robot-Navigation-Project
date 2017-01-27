@@ -31,7 +31,7 @@ public class testFX extends Application{
 	public ArrayList<Double> angleList = new ArrayList();
 
 	//image representing the robot
-	public Image roboImage = new Image("RoboImage.jpeg");
+	public Image roboImage = new Image("RoboImage2.jpg");
 	public ImageView robotImage = new ImageView();
 
 	public void start(Stage stage){
@@ -48,8 +48,10 @@ public class testFX extends Application{
 		//new environment created
 		Environment testEnvi = new Environment(width, height);
 		testEnvi.robot.navigate();
+
 		Rectangle goal = new Rectangle(testEnvi.goalPos.x - 25, testEnvi.goalPos.y - 25, 50, 50);
 		goal.setFill(Color.RED);
+
 
 
 		//all these lines are just the borders of the environment
@@ -91,12 +93,12 @@ public class testFX extends Application{
 		rootNode.getChildren().addAll(robotImage, myCanvas, goal);
 		
 
+		Line[] line = new Line[testEnvi.landmarks.size()];
 
 		for(int j = 0 ; j < testEnvi.landmarks.size() ; j++){
 
 			for(int i = 0 ; i < testEnvi.landmarks.get(j).vertices; i++){
 
-				Line[] line = new Line[testEnvi.landmarks.get(j).vertices];
 				line[i] = new Line(testEnvi.landmarks.get(j).lineSegList.get(i).ends[0].x, testEnvi.landmarks.get(j).lineSegList.get(i).ends[0].y, testEnvi.landmarks.get(j).lineSegList.get(i).ends[1].x, testEnvi.landmarks.get(j).lineSegList.get(i).ends[1].y); 
 				rootNode.getChildren().add(line[i]);
 
@@ -144,13 +146,12 @@ public class testFX extends Application{
 
         	long last = 0;
         	int count = 0;
-        	long currentNanoTime = System.nanoTime();
         	//System.out.println("inside timer");
 
         	public void handle(long currentNanoTime){
         		
-        		if((currentNanoTime - last) >= 1_000_000.0){
-        			//System.out.println("inside handle");
+        		if((currentNanoTime-last) >= 1000){
+        			System.out.println("inside handle");
         			count++;
         			printNextStep(count,rootNode);
         			last = currentNanoTime;
@@ -167,15 +168,17 @@ public class testFX extends Application{
 	//printing the solution
 	public void printNextStep(int step, Group rootNode){
 
-			double x = coordList.get(step).x;
-			double y = coordList.get(step).y;
-       		robotImage.setX(x);
-        	robotImage.setY(y);
-        	robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);
-        	Circle prevPos = new Circle(x, y, width/400);
-        	prevPos.toBack();
-        	rootNode.getChildren().add(prevPos);
-        	robotImage.toFront();
+			if(step<coordList.size()){
+				double x = coordList.get(step).x;
+				double y = coordList.get(step).y;
+				robotImage.setX(x);
+				robotImage.setY(y);
+				robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);
+				Circle prevPos = new Circle(x, y, width/500);
+				prevPos.toBack();
+				rootNode.getChildren().add(prevPos);
+				robotImage.toFront();
+			}
 
     }
 }

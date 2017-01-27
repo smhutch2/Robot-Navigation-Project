@@ -14,6 +14,8 @@ public class Robot{
 	public double turnspeed;
 	public Sensor mainSensor;
 	public double range;
+	public double angleRange;
+	public double res;
 
 	//Robot position variables
 	public Coordinate center;
@@ -30,6 +32,7 @@ public class Robot{
 	
 	//Navigate Variables
 	public double turnRange;
+	ArrayList<Coordinate> hits = new ArrayList();
 	public long its;
 
 	public Robot(double x, double y, double theta, double height, double width, double speed, double turnspeed, ArrayList<Landmark> landmarks, Coordinate GoalPos) {
@@ -54,12 +57,38 @@ public class Robot{
 		this.turnspeed = turnspeed;
 		this.goalPos = goalPos;
 		this.range = range;
+		this.angleRange = angleRange;
+		this.res = res;
 		updateCorners();
 		newSense = new Coordinate[(int)res];
 		mainSensor = new Sensor(range, angleRange, facing, pos, res, landmarks);
 		steps = new ArrayList();
 		angles = new ArrayList();
 	}	
+	
+	//checks to make sure the gap is wide enough
+ 	public boolean checkGap(Coordinate reading, int index){
+		if(newSense != null){
+			double angle = Math.PI; 
+			double tempangle = Math.PI;
+			boolean there = false;
+			double length =0;
+			for(int i = 0; i < newSense.length;i++){			
+				length = distance(newSense[i],center);
+				if(length<range){
+					tempangle = (angleRange/res)*Math.abs(index-i);
+					there = true;
+					if(tempangle < angle) angle = tempangle;
+				}
+			}
+			double gap = Math.sin(angle)*length;
+			if(there == false){
+				return true;
+			}
+			return (gap>width/4);
+		}
+		return true;
+	} 
 	
 	//updates the corners of the robot based on the center position and the angle
 	public void updateCorners() {
@@ -122,6 +151,9 @@ public class Robot{
 	public boolean rotate(double heading){
 		double tSpeed;
 		boolean there;
+		
+		if(theta>Math.PI*2) theta = theta - (Math.PI*2);
+		
 		if(Math.abs(heading-theta) < 0.00001){
 			return true;
 		}
@@ -163,6 +195,26 @@ public class Robot{
 		updateCorners();
 		return there;
 	}
+
+	//move backwards, opposite angle of theta
+	public boolean moveBack(Coordinate dest){
+		boolean there;
+		double xSpeed = round(speed*Math.cos(theta))*-1;
+		double ySpeed = round(speed*Math.sin(theta))*-1;		
+		
+		if(((Math.abs(dest.x-center.x)-Math.abs(xSpeed))<0.00001) && ((Math.abs(dest.y-center.y)-Math.abs(ySpeed))<0.00001)){
+			center.x = dest.x;
+			center.y = dest.y;
+			there = true;
+		}
+		else{
+			center.x += xSpeed;
+			center.y += ySpeed;
+			there = false;
+		}
+		updateCorners();
+		return there;
+	}
 	
  	//takes the robot to a position
 	public boolean goPos(Coordinate point){ //coordinate is relative to robot
@@ -184,13 +236,13 @@ public class Robot{
 		return true;
 	} 
 	
+	//this reverses failed contact
 	public boolean reverse(Coordinate point){
 		if(distance(center,point)<0.00001) return true;
-		theta = Math.atan2((point.y-center.y),(point.x-center.x));
-
+		theta = Math.atan2((center.y-point.y),(center.x-point.x));
 		boolean there = false;
 		while(!there){
-			there = move(point);
+			there = moveBack(point);
 			save();
 			if(checkContact()) return false;
 		}
@@ -198,18 +250,20 @@ public class Robot{
 		return true;		
 	}
 
+	//turns robot to face destination
 	public boolean turnDes(){
 		double heading = Math.atan2((goalPos.y-center.y),(goalPos.x-center.x));
 		boolean there = false;
 		if(distance(center,goalPos)<0.00001) return true;
 		while(!there){
 			there = rotate(heading);
+			save();
 			if(checkContact()) return false;
 		}
 		return true;
 	} 
 	
-	//recursive this
+	//finds sensor reading to go to
  	public Coordinate nextPos(){
 		readSensor();
 		Coordinate next = newSense[(int)(newSense.length/2)];
@@ -231,29 +285,77 @@ public class Robot{
 		return next;
 	} 
 	
-
+	//this is the recursive method that navigates towards the destination
 	public boolean iterate(Coordinate locate){
 		its++;
+		System.out.println(its);
 
+		//if its at the destination it will bubble back up
 		if(distance(center,goalPos)<0.00001) return true;
-		
+
+		//tries to go toward position given, and returns false it if fails
 		if(!goPos(locate)){
 			System.out.println("here5");
 			return false;
 		} 
+		
+		//tries to turn, returns false if fails
 		if(!turnDes()){
 			System.out.println("here6");			
 			return false;
 		}	
  
+		//fill newSense array
 		readSensor();
 
-				
-		if(distance(newSense[(int)(newSense.length/2)],center) > distance(goalPos,center)){
+		//if it is closer to destination than sensor range, 
+		if(range > distance(goalPos,center)){
 			System.out.println("here2");
 			return goPos(new Coordinate(goalPos.x,goalPos.y));
 		} 
 		
+		//error 3,5,1
+		//the following code runs a loop that tries different points, this is essential to recursion
+		Coordinate current = newSense[(int)(newSense.length/2)];
+		int index = (int)(newSense.length/2);
+		for(int i = 0; i < (int)(newSense.length/2)+1; i++){
+			for(int k = 0; k<=1;k++){
+				if(k == 0)index = (int)(newSense.length/2) - i;
+				if(k == 1)index = (int)(newSense.length/2) + i;
+				if(i == 0 && k == 1)break;
+				current = newSense[index];
+				double cDis = distance(locate,current);
+				if(Math.abs(cDis-range)<0.00001 && checkGap(current,index)){
+					System.out.println("here3");
+					if(iterate(current)){
+						System.out.println("here4");
+						return true;
+					}
+					else{
+						reverse(locate);
+						
+					}
+				} 				
+			}
+		}		
+		System.out.println("here1");
+		return false;
+	}
+	
+	public boolean iterate2(Coordinate locate){
+		its++;
+ 
+		//fill newSense array
+		readSensor();
+
+		//if it is closer to destination than sensor range, 
+		if(range > distance(goalPos,center)){
+			System.out.println("here2");
+			return goPos(new Coordinate(goalPos.x,goalPos.y));
+		} 
+		
+		//error 3,5,1
+		//the following code runs a loop that tries different points, this is essential to recursion
 		Coordinate current = newSense[(int)(newSense.length/2)];
 		int index = (int)(newSense.length/2);
 		for(int i = 0; i < (int)(newSense.length/2)+1; i++){
@@ -265,31 +367,53 @@ public class Robot{
 //				System.out.println("current: "+current.x+"\t"+current.y+"\t"+cDis);
 				if(Math.abs(cDis-range)<0.00001){
 					System.out.println("here3");
-					if(iterate(current)){
+					if(checkThere(current) && iterate(current)){
 						System.out.println("here4");
 						return true;
-					}
-					else{
-						reverse(locate);
-						turnDes();
 					}
 				} 				
 			}
 		}		
 		System.out.println("here1");
 		return false;
+	}	
+	
+	public boolean checkThere(Coordinate location){
+
+		//if its at the destination it will bubble back up
+		if(distance(center,goalPos)<0.00001) return true;
+
+		//tries to go toward position given, and returns false it if fails
+		if(!goPos(location)){
+			System.out.println("here5");
+			reverse(location);
+			turnDes();
+			return false;
+		} 
+		
+		//tries to turn, returns false if fails
+		if(!turnDes()){
+			System.out.println("here6");
+			reverse(location);
+			turnDes();			
+			return false;
+		}
+		return true;
 	}
 	
+	//calculates the distance between coordinates
  	public double distance(Coordinate c1, Coordinate c2){
 		LineSeg length = new LineSeg(c1,c2);
 		return length.getMagnitude();		
 	}
 	
+	//calls the recursive method to navigate
 	public void navigate(){
 		iterate(center);
 
 	}
 	
+	//saves a position so that it can be illustrated later
 	public void save(){
 		Coordinate temp = new Coordinate(center.x, center.y);
 		steps.add(temp);

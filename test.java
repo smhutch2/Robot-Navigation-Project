@@ -28,13 +28,19 @@ class test {
 		
 		//Coordinate pos = new Coordinate(0,20); 
 		//							x, y, t,  h,  w,  s,  d, angleRange, f         , pos, re,
-		Robot testRobot = new Robot(0, 0, Math.PI/2, 10, 10, 1, Math.PI/10,30,Math.PI/2,0,new Coordinate(0,0),11,landmarks, new Coordinate(0,100));
+		Robot testRobot = new Robot(0, 0, Math.PI/2, 10, 10, 1, Math.PI/10,70,Math.PI/2,0,new Coordinate(0,0),17,landmarks, new Coordinate(0,100));
 	//	testRobot.reverse(new Coordinate(0,0));
 	//	System.out.println(testRobot.distance(new Coordinate(0,0), new Coordinate(15,15)));
 //		testRobot.turnDes();
 //		System.out.println("Next place is: "+"x: "+testRobot.nextPos().x+" y: "+testRobot.nextPos().y);
 	//	testRobot.iterate(new Coordinate(0,0));
-		ArrayList<Coordinate> steps = new ArrayList();
+		
+		testRobot.readSensor();
+		for(int i = 0; i < testRobot.newSense.length;i++){
+			System.out.println(testRobot.newSense[i].x+"\t"+testRobot.newSense[i].y+"\t"+testRobot.checkGap(testRobot.newSense[i],i));
+		}
+	
+	/* 		ArrayList<Coordinate> steps = new ArrayList();
 		ArrayList<Double> angles = new ArrayList();
 		testRobot.navigate();
 		steps = testRobot.steps;
@@ -44,7 +50,7 @@ class test {
 			Coordinate point = steps.get(i);
 			double angle = angles.get(i);
 			System.out.println(point.x+"\t"+point.y+"\t"+angle);
-		}
+		} */
 /* 		boolean there = false;
 		
 		while(there == false){
@@ -63,10 +69,10 @@ class test {
 		Coordinate point4 = new Coordinate(6,12);
 		LineSeg line1 = new LineSeg(point3,point4);*/
 		
- /*		for(int i = 0; i < testRobot.mainSensor.res;i++){
+/* 		for(int i = 0; i < testRobot.mainSensor.res;i++){
 			System.out.println(testRobot.newSense[i].x+"\t"+testRobot.newSense[i].y+"\t"+testRobot.newSense[i].exists);
 		} 
- 		System.out.println();
+ /*		System.out.println();
 		
 		Coordinate tr = new Coordinate(1,1);
 		Coordinate hi = new Coordinate(-1,-2);
