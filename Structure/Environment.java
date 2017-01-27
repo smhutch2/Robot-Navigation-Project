@@ -39,7 +39,7 @@ public class Environment{
 		borderSegList.add(rightBorder);
 
 		//robotPos had preset val for x, now random
-		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 650);
+		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 700);
 		//was width/2 for goalPos x val, now random
 		this.goalPos = new Coordinate(posRand.nextInt(400) + 300, 50);
 		this.robotSize = width/20;
@@ -158,14 +158,15 @@ public class Environment{
 			for(i = 0 ; i < landmarkAmount ; i++){
 
 				System.out.println("LM Loop: " + i + "     Angle Sum: " + spacingAngle);
-
-				vertice = vertices.nextInt(17) + 3;
-				theta = (angle.nextInt(150) + 50)/radius;
-				y = Math.sin(theta + spacingAngle) * radius;
-				x = Math.cos(theta + spacingAngle) * radius + width/2;
-				Coordinate xy = new Coordinate(x, y);
-				landmarks.add(randomLandmark(robotSize/2, vertice, xy));
-				spacingAngle += theta;
+ 				if(spacingAngle <= 2*Math.PI){
+					vertice = vertices.nextInt(17) + 3;
+					theta = (angle.nextInt(150) + 50 - (j * 5))/radius;
+					y = Math.sin(theta + spacingAngle) * radius;
+					x = Math.cos(theta + spacingAngle) * radius + width/2;
+					Coordinate xy = new Coordinate(x, y);
+					landmarks.add(randomLandmark(robotSize/2, vertice, xy));
+					spacingAngle += theta;
+				}
 
 			}
 

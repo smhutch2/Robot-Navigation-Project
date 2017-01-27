@@ -50,7 +50,7 @@ public class testFX extends Application{
 		testEnvi.robot.navigate();
 
 		Rectangle goal = new Rectangle(testEnvi.goalPos.x - 25, testEnvi.goalPos.y - 25, 50, 50);
-		goal.setFill(Color.RED);
+		goal.setFill(Color.BLUE);
 
 
 
@@ -67,17 +67,6 @@ public class testFX extends Application{
 
 		rootNode.getChildren().addAll(b1, b2, b3, b4);
 
-		Line l1 = new Line(testEnvi.robot.corners[0].x, testEnvi.robot.corners[0].y, testEnvi.robot.corners[1].x, testEnvi.robot.corners[1].y);
-		Line l2 = new Line(testEnvi.robot.corners[1].x, testEnvi.robot.corners[1].y, testEnvi.robot.corners[2].x, testEnvi.robot.corners[2].y);
-		Line l3 = new Line(testEnvi.robot.corners[2].x, testEnvi.robot.corners[2].y, testEnvi.robot.corners[3].x, testEnvi.robot.corners[3].y);
-		Line l4 = new Line(testEnvi.robot.corners[3].x, testEnvi.robot.corners[3].y, testEnvi.robot.corners[0].x, testEnvi.robot.corners[0].y);
-
-		l1.setStrokeWidth(5);
-		l2.setStrokeWidth(5);
-		l3.setStrokeWidth(5);
-		l4.setStrokeWidth(5);
-
-		
 
 		//image representing the robot
 		robotImage.setImage(roboImage);
