@@ -20,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.event.*;
 import javafx.animation.AnimationTimer;
 import javafx.animation.*;
+import javafx.scene.paint.Color;
 
 public class testFX extends Application{
 
@@ -47,7 +48,8 @@ public class testFX extends Application{
 		//new environment created
 		Environment testEnvi = new Environment(width, height);
 		testEnvi.robot.navigate();
-		Rectangle goal = new Rectangle(testEnvi.goalPos.x, testEnvi.goalPos.y, 50, 50);
+		Rectangle goal = new Rectangle(testEnvi.goalPos.x - 25, testEnvi.goalPos.y, 50, 50);
+		goal.setFill(Color.RED);
 
 
 		//all these lines are just the borders of the environment
@@ -89,12 +91,12 @@ public class testFX extends Application{
 		rootNode.getChildren().addAll(robotImage, myCanvas, goal);
 		
 
-		Line[] line = new Line[testEnvi.landmarks.size()];
 
 		for(int j = 0 ; j < testEnvi.landmarks.size() ; j++){
 
 			for(int i = 0 ; i < testEnvi.landmarks.get(j).vertices; i++){
 
+				Line[] line = new Line[testEnvi.landmarks.get(j).vertices];
 				line[i] = new Line(testEnvi.landmarks.get(j).lineSegList.get(i).ends[0].x, testEnvi.landmarks.get(j).lineSegList.get(i).ends[0].y, testEnvi.landmarks.get(j).lineSegList.get(i).ends[1].x, testEnvi.landmarks.get(j).lineSegList.get(i).ends[1].y); 
 				rootNode.getChildren().add(line[i]);
 
@@ -142,12 +144,13 @@ public class testFX extends Application{
 
         	long last = 0;
         	int count = 0;
+        	long currentNanoTime = System.nanoTime();
         	//System.out.println("inside timer");
 
         	public void handle(long currentNanoTime){
         		
-        		if((currentNanoTime-last) >= 10000){
-        			System.out.println("inside handle");
+        		if((currentNanoTime - last) >= 1_000_000.0){
+        			//System.out.println("inside handle");
         			count++;
         			printNextStep(count,rootNode);
         			last = currentNanoTime;
