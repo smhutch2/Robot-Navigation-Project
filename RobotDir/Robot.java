@@ -25,6 +25,7 @@ public class Robot{
 	public Coordinate newSense[];
 	public ArrayList<Coordinate> steps;
 	public ArrayList<Double> angles;
+	public Coordinate front;
 	
 	//Environment variables
 	ArrayList<Landmark> landmarks;
@@ -66,6 +67,15 @@ public class Robot{
 		angles = new ArrayList();
 	}	
 	
+	//moves center according to where front is 
+	public void updateCenter(){
+		double dx = (height/2)*Math.cos(theta)*-1;
+		double dy = (height/2)*Math.sin(theta)*-1;
+		center.x = front.x+dx;
+		center.y = front.y+dy;
+		
+	}
+	
 	//checks to make sure the gap is wide enough
  	public boolean checkGap(Coordinate reading, int index){
 		if(newSense != null){
@@ -75,17 +85,18 @@ public class Robot{
 			double length =0;
 			for(int i = 0; i < newSense.length;i++){			
 				length = distance(newSense[i],center);
-				if(length<range){
+				if(length<range-0.00001){
 					tempangle = (angleRange/res)*Math.abs(index-i);
 					there = true;
 					if(tempangle < angle) angle = tempangle;
 				}
 			}
 			double gap = Math.sin(angle)*length;
+			
 			if(there == false){
 				return true;
 			}
-			return (gap>width/4);
+			return (gap>width/2);
 		}
 		return true;
 	} 
@@ -241,6 +252,7 @@ public class Robot{
 		if(distance(center,point)<0.00001) return true;
 		theta = Math.atan2((center.y-point.y),(center.x-point.x));
 		boolean there = false;
+		there = moveBack(point);
 		while(!there){
 			there = moveBack(point);
 			save();
@@ -322,8 +334,10 @@ public class Robot{
 			for(int k = 0; k<=1;k++){
 				if(k == 0)index = (int)(newSense.length/2) - i;
 				if(k == 1)index = (int)(newSense.length/2) + i;
-				if(i == 0 && k == 1)break;
+				if(i == 0 && k == 1) break;
 				current = newSense[index];
+				System.out.println(newSense[index].x+"\t"+newSense[index].y+"\t"+checkGap(current,index)+"\t"+index);
+				//for(int j = 0;j<newSense.length;j++) System.out.println(newSense[j].x+"\t"+newSense[j].y+"\t"+checkGap(current,index));
 				double cDis = distance(locate,current);
 				if(Math.abs(cDis-range)<0.00001 && checkGap(current,index)){
 					System.out.println("here3");
@@ -332,7 +346,10 @@ public class Robot{
 						return true;
 					}
 					else{
+					//	for(int j = 0;j<newSense.length;j++) System.out.println(newSense[j].x+"\t"+newSense[j].y+"\t"+checkGap(current,index));
 						reverse(locate);
+						readSensor();
+						its--;
 						
 					}
 				} 				
@@ -340,65 +357,6 @@ public class Robot{
 		}		
 		System.out.println("here1");
 		return false;
-	}
-	
-	public boolean iterate2(Coordinate locate){
-		its++;
- 
-		//fill newSense array
-		readSensor();
-
-		//if it is closer to destination than sensor range, 
-		if(range > distance(goalPos,center)){
-			System.out.println("here2");
-			return goPos(new Coordinate(goalPos.x,goalPos.y));
-		} 
-		
-		//error 3,5,1
-		//the following code runs a loop that tries different points, this is essential to recursion
-		Coordinate current = newSense[(int)(newSense.length/2)];
-		int index = (int)(newSense.length/2);
-		for(int i = 0; i < (int)(newSense.length/2)+1; i++){
-			for(int k = 0; k<=1;k++){
-				if(k == 0)index = (int)(newSense.length/2) - i;
-				if(k == 1)index = (int)(newSense.length/2) + i;
-				current = newSense[index];
-				double cDis = distance(locate,current);
-//				System.out.println("current: "+current.x+"\t"+current.y+"\t"+cDis);
-				if(Math.abs(cDis-range)<0.00001){
-					System.out.println("here3");
-					if(checkThere(current) && iterate(current)){
-						System.out.println("here4");
-						return true;
-					}
-				} 				
-			}
-		}		
-		System.out.println("here1");
-		return false;
-	}	
-	
-	public boolean checkThere(Coordinate location){
-
-		//if its at the destination it will bubble back up
-		if(distance(center,goalPos)<0.00001) return true;
-
-		//tries to go toward position given, and returns false it if fails
-		if(!goPos(location)){
-			System.out.println("here5");
-			reverse(location);
-			turnDes();
-			return false;
-		} 
-		
-		//tries to turn, returns false if fails
-		if(!turnDes()){
-			System.out.println("here6");
-			reverse(location);
-			turnDes();			
-			return false;
-		}
-		return true;
 	}
 	
 	//calculates the distance between coordinates

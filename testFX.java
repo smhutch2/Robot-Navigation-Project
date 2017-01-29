@@ -151,7 +151,6 @@ public class testFX extends Application{
         	public void handle(long currentNanoTime){
         		
         		if((currentNanoTime-last) >= 1000){
-        			System.out.println("inside handle");
         			count++;
         			printNextStep(count,rootNode);
         			last = currentNanoTime;
