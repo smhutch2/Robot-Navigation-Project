@@ -18,8 +18,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.event.*;
-import javafx.animation.AnimationTimer;
-import javafx.animation.*;
 import javafx.scene.paint.Color;
 
 public class testFX extends Application{
@@ -33,14 +31,13 @@ public class testFX extends Application{
 	//image representing the robot
 	public Image roboImage = new Image("RoboImage2.jpg");
 	public ImageView robotImage = new ImageView();
+	public Group rootNode = new Group();
 
 	public void start(Stage stage){
 
 		stage.setTitle("JavaFX Window");
 
  
-
-   		Group rootNode = new Group();
    		Scene myScene = new Scene(rootNode, width, height);
 		stage.setScene(myScene);
 		Canvas myCanvas = new Canvas(width, height);
@@ -50,7 +47,7 @@ public class testFX extends Application{
 		testEnvi.robot.navigate();
 
 		Rectangle goal = new Rectangle(testEnvi.goalPos.x - 25, testEnvi.goalPos.y - 25, 50, 50);
-		goal.setFill(Color.RED);
+		goal.setFill(Color.BLUE);
 
 
 
@@ -67,17 +64,6 @@ public class testFX extends Application{
 
 		rootNode.getChildren().addAll(b1, b2, b3, b4);
 
-		Line l1 = new Line(testEnvi.robot.corners[0].x, testEnvi.robot.corners[0].y, testEnvi.robot.corners[1].x, testEnvi.robot.corners[1].y);
-		Line l2 = new Line(testEnvi.robot.corners[1].x, testEnvi.robot.corners[1].y, testEnvi.robot.corners[2].x, testEnvi.robot.corners[2].y);
-		Line l3 = new Line(testEnvi.robot.corners[2].x, testEnvi.robot.corners[2].y, testEnvi.robot.corners[3].x, testEnvi.robot.corners[3].y);
-		Line l4 = new Line(testEnvi.robot.corners[3].x, testEnvi.robot.corners[3].y, testEnvi.robot.corners[0].x, testEnvi.robot.corners[0].y);
-
-		l1.setStrokeWidth(5);
-		l2.setStrokeWidth(5);
-		l3.setStrokeWidth(5);
-		l4.setStrokeWidth(5);
-
-		
 
 		//image representing the robot
 		robotImage.setImage(roboImage);
@@ -85,8 +71,8 @@ public class testFX extends Application{
 		robotImage.setFitWidth(testEnvi.robot.width);
 
         //set X and Y to robot center val
-        robotImage.setX(500);
-        robotImage.setY(600);
+        robotImage.setX(testEnvi.robotPos.x);
+        robotImage.setY(testEnvi.robotPos.y);
         robotImage.setLayoutX(-testEnvi.robot.width/2);
         robotImage.setLayoutY(-testEnvi.robot.height/2);
 
@@ -109,55 +95,106 @@ public class testFX extends Application{
 		coordList = testEnvi.robot.steps;
 		angleList = testEnvi.robot.angles;
 
-		//buttons for iteration navigation
-		Button nextStep = new Button("Next");
-		Button prevStep = new Button("Back");
+        TimerControl timer = new TimerControl();
+        timer.TEST = this;
+        Button startAni = new Button("Start");
+		Button stopAni = new Button("Stop");
+		Button resetAni = new Button("Reset");
+		Button resetEnvi = new Button("Reset Environment");
 
-		nextStep.relocate(0, 0);
-		prevStep.relocate(0, 50);
+		startAni.relocate(0, 0);
+		stopAni.relocate(0, 50);
+		resetAni.relocate(0, 100);
+		resetEnvi.relocate(0, 150);
+		rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi);
 
-		rootNode.getChildren().addAll(nextStep, prevStep);
 
-		//button handlers
-		nextStep.setOnAction(new EventHandler<ActionEvent>() {
+        startAni.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-            	final int a = i;
-            	printNextStep(a, rootNode);
-            	System.out.println("Step: " + i);
-            	i++;
+
+            	timer.start();
 
             }
         });
 
-        prevStep.setOnAction(new EventHandler<ActionEvent>() {
+        stopAni.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-            	final int a = i;
-            	printNextStep(a, rootNode);
-            	System.out.println("Step: " + i);
-            	i--;
+            	timer.stop();
+
+            }
+        });
+
+        resetAni.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+            	timer.count = 0;
 
             }
         });
 
 
-        new AnimationTimer(){
+        ////////////////WIP////////////////
+        resetEnvi.setOnAction(new EventHandler<ActionEvent>() {
+        	@Override public void handle(ActionEvent e) {
 
-        	long last = 0;
-        	int count = 0;
-        	//System.out.println("inside timer");
+        		rootNode.getChildren().clear();
 
-        	public void handle(long currentNanoTime){
-        		
-        		if((currentNanoTime-last) >= 1000){
-        			count++;
-        			printNextStep(count,rootNode);
-        			last = currentNanoTime;
-        		}
-        		
-        	}	
-        }.start();
+            	Environment testEnvi = new Environment(width, height);
+				testEnvi.robot.navigate();
+
+				Rectangle goal = new Rectangle(testEnvi.goalPos.x - 25, testEnvi.goalPos.y - 25, 50, 50);
+				goal.setFill(Color.BLUE);
+
+
+
+		//all these lines are just the borders of the environment
+				Line b1 = new Line(testEnvi.bottomBorder.ends[0].x, testEnvi.bottomBorder.ends[0].y, testEnvi.bottomBorder.ends[1].x, testEnvi.bottomBorder.ends[1].y);
+				Line b2 = new Line(testEnvi.topBorder.ends[0].x, testEnvi.topBorder.ends[0].y, testEnvi.topBorder.ends[1].x, testEnvi.topBorder.ends[1].y);
+				Line b3 = new Line(testEnvi.leftBorder.ends[0].x, testEnvi.leftBorder.ends[0].y, testEnvi.leftBorder.ends[1].x, testEnvi.leftBorder.ends[1].y);
+				Line b4 = new Line(testEnvi.rightBorder.ends[0].x, testEnvi.rightBorder.ends[0].y, testEnvi.rightBorder.ends[1].x, testEnvi.rightBorder.ends[1].y);
+
+				b1.setStrokeWidth(10);
+				b2.setStrokeWidth(10);
+				b3.setStrokeWidth(10);
+				b4.setStrokeWidth(10);
+
+				rootNode.getChildren().addAll(b1, b2, b3, b4);
+
+		//image representing the robot
+				robotImage.setImage(roboImage);
+				robotImage.setFitHeight(testEnvi.robot.height);
+				robotImage.setFitWidth(testEnvi.robot.width);
+
+        //set X and Y to robot center val
+       			robotImage.setX(testEnvi.robotPos.x);
+        		robotImage.setY(testEnvi.robotPos.y);
+        		robotImage.setLayoutX(-testEnvi.robot.width/2);
+        		robotImage.setLayoutY(-testEnvi.robot.height/2);
+
+				rootNode.getChildren().addAll(robotImage, myCanvas, goal);
+
+				Line[] line = new Line[testEnvi.landmarks.size()];
+
+				for(int j = 0 ; j < testEnvi.landmarks.size() ; j++){
+
+					for(int i = 0 ; i < testEnvi.landmarks.get(j).vertices; i++){
+
+						line[i] = new Line(testEnvi.landmarks.get(j).lineSegList.get(i).ends[0].x, testEnvi.landmarks.get(j).lineSegList.get(i).ends[0].y, testEnvi.landmarks.get(j).lineSegList.get(i).ends[1].x, testEnvi.landmarks.get(j).lineSegList.get(i).ends[1].y); 
+						rootNode.getChildren().add(line[i]);
+
+					}
+
+				}
+
+				coordList = testEnvi.robot.steps;
+				angleList = testEnvi.robot.angles;
+				rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi);
+
+            }
+        });
+
 
 
 		stage.show();
@@ -165,7 +202,7 @@ public class testFX extends Application{
 	}
 
 	//printing the solution
-	public void printNextStep(int step, Group rootNode){
+	public void PrintNextStep(int step){
 
 			if(step<coordList.size()){
 				double x = coordList.get(step).x;
