@@ -190,6 +190,7 @@ public class testFX extends Application{
 
 				coordList = testEnvi.robot.steps;
 				angleList = testEnvi.robot.angles;
+				timer.stop();
 				timer.count = 0;
 				rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi);
 
