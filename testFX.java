@@ -18,8 +18,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.event.*;
-import javafx.animation.AnimationTimer;
-import javafx.animation.*;
 import javafx.scene.paint.Color;
 
 public class testFX extends Application{
@@ -33,14 +31,13 @@ public class testFX extends Application{
 	//image representing the robot
 	public Image roboImage = new Image("RoboImage2.jpg");
 	public ImageView robotImage = new ImageView();
+	public Group rootNode = new Group();
 
 	public void start(Stage stage){
 
 		stage.setTitle("JavaFX Window");
 
  
-
-   		Group rootNode = new Group();
    		Scene myScene = new Scene(rootNode, width, height);
 		stage.setScene(myScene);
 		Canvas myCanvas = new Canvas(width, height);
@@ -99,15 +96,18 @@ public class testFX extends Application{
 		angleList = testEnvi.robot.angles;
 
 		//buttons for iteration navigation
+		/*
 		Button nextStep = new Button("Next");
 		Button prevStep = new Button("Back");
 
 		nextStep.relocate(0, 0);
 		prevStep.relocate(0, 50);
-
 		rootNode.getChildren().addAll(nextStep, prevStep);
 
+		*/
+
 		//button handlers
+		/*
 		nextStep.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
@@ -129,33 +129,52 @@ public class testFX extends Application{
 
             }
         });
+        */
 
 
-        new AnimationTimer(){
+        TimerControl timer = new TimerControl();
+        timer.TEST = this;
+        Button startAni = new Button("Start");
+		Button stopAni = new Button("Stop");
+		Button resetAni = new Button("Reset");
 
-        	long last = 0;
-        	int count = 0;
-        	//System.out.println("inside timer");
+		startAni.relocate(0, 0);
+		stopAni.relocate(0, 50);
+		resetAni.relocate(0, 100);
+		rootNode.getChildren().addAll(startAni, stopAni, resetAni);
 
-        	public void handle(long currentNanoTime){
-        		
-        		if((currentNanoTime-last) >= 1000){
-        			System.out.println("inside handle");
-        			count++;
-        			printNextStep(count,rootNode);
-        			last = currentNanoTime;
-        		}
-        		
-        	}	
-        }.start();
 
+        startAni.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+
+            	timer.start();
+
+            }
+        });
+
+        stopAni.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+            	timer.stop();
+
+            }
+        });
+
+        resetAni.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+            	timer.count = 0;
+
+            }
+        });
 
 		stage.show();
 
 	}
 
 	//printing the solution
-	public void printNextStep(int step, Group rootNode){
+	public void PrintNextStep(int step){
 
 			if(step<coordList.size()){
 				double x = coordList.get(step).x;
