@@ -49,7 +49,8 @@ public class Environment{
 		landmarks.add(borderLandmark);
 
 		randomLandmarksRadialV2();
-		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/40, robotSize, Math.PI, 0.0d, new Coordinate(0, 0), 17.0d, landmarks, goalPos);
+
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/40, robotSize*1.5, Math.PI/2, 0.0d, new Coordinate(0, 0), 17.0d, landmarks, goalPos);
 
 	}
 

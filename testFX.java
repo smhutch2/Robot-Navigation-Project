@@ -199,7 +199,6 @@ public class testFX extends Application{
 
 
 
-
 		stage.show();
 
 	}
