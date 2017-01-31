@@ -28,9 +28,9 @@ class test {
 		
 		//Coordinate pos = new Coordinate(0,20); 
 		//							x, y, t,  h,  w,  s,  d, angleRange, f         , pos, re,
-		Robot testRobot = new Robot(0, 0, Math.PI/2, 10, 10, 1, Math.PI/10,70,Math.PI/2,0,new Coordinate(0,0),17,landmarks, new Coordinate(0,100));
+		Robot testRobot = new Robot(0, 0, Math.PI/2, 10, 10, 1, Math.PI/10,100,Math.PI/2,0,new Coordinate(0,0),17,landmarks, new Coordinate(0,100));
 		
-		testRobot.goPos(new Coordinate(10,10));
+	/*	testRobot.goPos(new Coordinate(10,10));
 		
 		System.out.println(testRobot.center.x+"\t"+testRobot.center.y+"\t"+testRobot.theta);
 		
@@ -38,7 +38,12 @@ class test {
 		testRobot.updateCenter();
 
 		System.out.println(testRobot.center.x+"\t"+testRobot.center.y+"\t"+testRobot.theta);
-		
+	*/
+		testRobot.readSensor();
+
+		for(int i = 0; i < testRobot.newSense.length;i++){
+			System.out.println(testRobot.newSense[i].x+"\t"+testRobot.newSense[i].y+"\t"+testRobot.checkGap(testRobot.newSense[i],i));
+		} 		
 	//	testRobot.reverse(new Coordinate(0,0));
 	//	System.out.println(testRobot.distance(new Coordinate(0,0), new Coordinate(15,15)));
 //		testRobot.turnDes();
