@@ -27,7 +27,8 @@ public class testFX extends Application{
 	public int i = 0;
 	public ArrayList<Coordinate> coordList = new ArrayList();
 	public ArrayList<Double> angleList = new ArrayList();
-
+	public ArrayList<Coordinate[]> readings = new ArrayList();
+	
 	//image representing the robot
 	public Image roboImage = new Image("RoboImage2.jpg");
 	public ImageView robotImage = new ImageView();
@@ -69,7 +70,7 @@ public class testFX extends Application{
 		robotImage.setImage(roboImage);
 		robotImage.setFitHeight(testEnvi.robot.height);
 		robotImage.setFitWidth(testEnvi.robot.width);
-
+		
         //set X and Y to robot center val
         robotImage.setX(testEnvi.robotPos.x);
         robotImage.setY(testEnvi.robotPos.y);
@@ -190,6 +191,10 @@ public class testFX extends Application{
 
 				coordList = testEnvi.robot.steps;
 				angleList = testEnvi.robot.angles;
+				readings = testEnvi.robot.readings;
+				
+
+				
 				timer.stop();
 				timer.count = 0;
 				rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi);
@@ -209,6 +214,7 @@ public class testFX extends Application{
 			if(step<coordList.size()){
 				double x = coordList.get(step).x;
 				double y = coordList.get(step).y;
+				
 				robotImage.setX(x);
 				robotImage.setY(y);
 				robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);

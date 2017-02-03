@@ -22,6 +22,12 @@ public class Sensor{
 		this.landmarks = landmarks;
 	}
 	
+	//rounds numbers
+	public double round(double num){
+		if(num < 0.000001 && num > -0.000001) num = 0;
+		return num;
+	}
+	
 	//fills newSense with coordinates of the sensor reading
 	public void sense(Coordinate center, double theta, Coordinate newSense[]){
 		//clear newSense
@@ -38,6 +44,7 @@ public class Sensor{
 		offset.x = pos.x;
 		offset.y = pos.y;
 		offset.transform(center);
+		System.out.println(offset.x+"\t"+offset.y);
 		
 		//creates a lineseg for each increment and sees if there is contact
 		for(int i =0;i<res;i++){
@@ -58,6 +65,7 @@ public class Sensor{
 					
 					//if there is an intersection, it adds it to newSense, if there's not it adds point
 					Coordinate intersect = lineSense.checkCross(line);
+					
 					//if it intersects
 					if(intersect.exists){
 						//if there is a point already for that reading

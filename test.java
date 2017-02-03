@@ -12,24 +12,34 @@ class test {
 	public static void main(String args[]){
  		ArrayList<Landmark> landmarks = new ArrayList<Landmark>();
 		ArrayList<LineSeg> linesegs = new ArrayList<LineSeg>();
-		linesegs.add(new LineSeg(new Coordinate(-30,50), new Coordinate(0,50)));
-		linesegs.add(new LineSeg(new Coordinate(0,50), new Coordinate(0,60)));
-		linesegs.add(new LineSeg(new Coordinate(0,60), new Coordinate(-30,60)));
+		linesegs.add(new LineSeg(new Coordinate(-30,50), new Coordinate(30,50)));
+		linesegs.add(new LineSeg(new Coordinate(30,50), new Coordinate(30,60)));
+		linesegs.add(new LineSeg(new Coordinate(30,60), new Coordinate(-30,60)));
 		linesegs.add(new LineSeg(new Coordinate(-30,60), new Coordinate(-30,50)));
 		
 		ArrayList<LineSeg> linesegs2 = new ArrayList<LineSeg>();
-		linesegs2.add(new LineSeg(new Coordinate(30,60), new Coordinate(50,60)));
-		linesegs2.add(new LineSeg(new Coordinate(50,60), new Coordinate(50,50)));
-		linesegs2.add(new LineSeg(new Coordinate(50,50), new Coordinate(30,50)));
-		linesegs2.add(new LineSeg(new Coordinate(30,50), new Coordinate(30,60)));
+		linesegs2.add(new LineSeg(new Coordinate(30,80), new Coordinate(50,80)));
+		linesegs2.add(new LineSeg(new Coordinate(50,80), new Coordinate(50,70)));
+		linesegs2.add(new LineSeg(new Coordinate(50,70), new Coordinate(30,70)));
+		linesegs2.add(new LineSeg(new Coordinate(30,70), new Coordinate(30,80)));
 		
 		landmarks.add(new Landmark(linesegs));
 		landmarks.add(new Landmark(linesegs2));
 		
+//		LineSeg test1 = new LineSeg(new Coordinate(0,50), new Coordinate(0,60));
+		
+//		Coordinate point = test1.checkCross(new LineSeg(new Coordinate(-12.9672907550034250,67.59199037394889),new Coordinate(20,30)));
+//		System.out.println(point.exists+"\t"+point.x+"\t"+point.y);
+		
 		//Coordinate pos = new Coordinate(0,20); 
 		//							x, y, t,  h,  w,  s,  d, angleRange, f         , pos, re,
-		Robot testRobot = new Robot(0, 0, Math.PI/2, 10, 10, 1, Math.PI/10,100,Math.PI/2,0,new Coordinate(0,0),17,landmarks, new Coordinate(0,100));
-		
+	//	Robot testRobot = new Robot(0, 0, Math.PI/4, 10, 10, 1, Math.PI/10,100,Math.PI/2,0,new Coordinate(0,0),17,landmarks, new Coordinate(0,100));
+		Robot testRobot = new Robot(50, 0, 2*Math.PI/3, 20, 20, 1, Math.PI/10, 30, Math.PI/2, 0.0d, new Coordinate(0, 0), 17.0d, landmarks, new Coordinate(0,100));
+		testRobot.navigate();
+		for(int i = 0; i<testRobot.steps.size();i++){
+			System.out.println(testRobot.steps.get(i).x+"\t"+testRobot.steps.get(i).y);
+		}
+
 	/*	testRobot.goPos(new Coordinate(10,10));
 		
 		System.out.println(testRobot.center.x+"\t"+testRobot.center.y+"\t"+testRobot.theta);
@@ -39,11 +49,13 @@ class test {
 
 		System.out.println(testRobot.center.x+"\t"+testRobot.center.y+"\t"+testRobot.theta);
 	*/
+	/*
 		testRobot.readSensor();
 
 		for(int i = 0; i < testRobot.newSense.length;i++){
 			System.out.println(testRobot.newSense[i].x+"\t"+testRobot.newSense[i].y+"\t"+testRobot.checkGap(testRobot.newSense[i],i));
 		} 		
+		*/
 	//	testRobot.reverse(new Coordinate(0,0));
 	//	System.out.println(testRobot.distance(new Coordinate(0,0), new Coordinate(15,15)));
 //		testRobot.turnDes();

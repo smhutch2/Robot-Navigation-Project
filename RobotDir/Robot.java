@@ -16,6 +16,7 @@ public class Robot{
 	public double range;
 	public double angleRange;
 	public double res;
+	public double diag;
 
 	//Robot position variables
 	public Coordinate center;
@@ -26,29 +27,20 @@ public class Robot{
 	public ArrayList<Coordinate> steps;
 	public ArrayList<Double> angles;
 	public Coordinate front;
+	public ArrayList<Coordinate[]> readings = new ArrayList();
 	
 	//Environment variables
-	ArrayList<Landmark> landmarks;
-	Coordinate goalPos;
+	public ArrayList<Landmark> landmarks;
+	public Coordinate goalPos;
 	
 	//Navigate Variables
 	public double turnRange;
-	ArrayList<Coordinate> hits = new ArrayList();
+	public ArrayList<Coordinate> hits = new ArrayList();
 	public long its;
-
-	public Robot(double x, double y, double theta, double height, double width, double speed, double turnspeed, ArrayList<Landmark> landmarks, Coordinate GoalPos) {
-		center = new Coordinate(x,y);
-		this.height = height;
-		this.width = width;
-		this.speed = speed;
-		this.theta = theta;
-		this.turnspeed = turnspeed;
-		this.goalPos = goalPos;		
-		updateCorners();
-	}
+	public double threshold;
 
 	//res needs to be odd,
-	public Robot(double x, double y, double theta, double height, double width, double speed, double turnspeed, double range, double angleRange, double facing, Coordinate pos, double res, ArrayList<Landmark> landmarks, Coordinate goalPos) {
+	public Robot(double x, double y, double theta, double height, double width, double speed, double turnspeed, double range, double angleRange, double facing, Coordinate pos, double res, ArrayList<Landmark> landmarks, Coordinate goalPos, double threshold) {
 		center = new Coordinate(x,y);
 		this.height = height;
 		this.width = width;
@@ -60,11 +52,13 @@ public class Robot{
 		this.range = range;
 		this.angleRange = angleRange;
 		this.res = res;
+		this.threshold = threshold;
 		updateCorners();
 		newSense = new Coordinate[(int)res];
 		mainSensor = new Sensor(range, angleRange, facing, pos, res, landmarks);
 		steps = new ArrayList();
 		angles = new ArrayList();
+		setDiag();
 	}	
 	
 	//moves center according to where front is 
@@ -101,6 +95,10 @@ public class Robot{
 		return true;
 	} 
 	
+	private void setDiag(){
+		diag = Math.sqrt(width*width+height*height);
+	}
+	
 	//updates the corners of the robot based on the center position and the angle
 	public void updateCorners() {
 		//direct is the straight line from center to corner
@@ -130,6 +128,10 @@ public class Robot{
 	//updates sensor array
 	public void readSensor(){
 		mainSensor.sense(center,theta,newSense);
+		System.out.println("Reading Sensor: ");
+		for(int i = 0; i < res; i++){
+			System.out.println(newSense[i].x+"\t"+newSense[i].y+"\t"+i);
+		}
 	}
 	
 	//rounds numbers
@@ -300,6 +302,10 @@ public class Robot{
 	//this is the recursive method that navigates towards the destination
 	public boolean iterate(Coordinate locate){
 		its++;
+		if(its>200){
+			System.out.println("Failure");
+			return true;
+		}
 		System.out.println(its);
 
 		//if its at the destination it will bubble back up
@@ -332,8 +338,8 @@ public class Robot{
 		int index = (int)(newSense.length/2);
 		for(int i = 0; i < (int)(newSense.length/2)+1; i++){
 			for(int k = 0; k<=1;k++){
-				if(k == 0)index = (int)(newSense.length/2) - i;
-				if(k == 1)index = (int)(newSense.length/2) + i;
+				if(k == 1)index = (int)(newSense.length/2) - i; //these are reversed for testing purposes
+				if(k == 0)index = (int)(newSense.length/2) + i;
 				if(i == 0 && k == 1) break;
 				current = newSense[index];
 				System.out.println(newSense[index].x+"\t"+newSense[index].y+"\t"+checkGap(current,index)+"\t"+index);
@@ -348,13 +354,16 @@ public class Robot{
 					else{
 					//	for(int j = 0;j<newSense.length;j++) System.out.println(newSense[j].x+"\t"+newSense[j].y+"\t"+checkGap(current,index));
 						reverse(locate);
-						readSensor();
+						turnDes();
+						readSensor();			
 						its--;
 						
 					}
 				} 				
 			}
 		}		
+		turnDes();
+		readSensor();
 		System.out.println("here1");
 		return false;
 	}
@@ -376,6 +385,7 @@ public class Robot{
 		Coordinate temp = new Coordinate(center.x, center.y);
 		steps.add(temp);
 		angles.add(theta);
+		readings.add(newSense);
 	}
 	
 }

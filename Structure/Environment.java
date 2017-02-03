@@ -50,7 +50,7 @@ public class Environment{
 
 		randomLandmarksRadialV2();
 
-		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/40, robotSize, Math.PI/2, 0.0d, new Coordinate(0, 0), 11.0d, landmarks, goalPos);
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/40, robotSize*1.25, Math.PI/2, 0.0d, new Coordinate(0, 0), 11.0d, landmarks, goalPos);
 
 	}
 
