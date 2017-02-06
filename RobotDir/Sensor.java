@@ -44,7 +44,6 @@ public class Sensor{
 		offset.x = pos.x;
 		offset.y = pos.y;
 		offset.transform(center);
-		System.out.println(offset.x+"\t"+offset.y);
 		
 		//creates a lineseg for each increment and sees if there is contact
 		for(int i =0;i<res;i++){
