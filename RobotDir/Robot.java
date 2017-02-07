@@ -61,7 +61,9 @@ public class Robot{
 	
 	//moves center according to where front is 
 	public Coordinate calcShift(Coordinate point){
-		return new Coordinate(point.x-(0.5*width),point.y-(0.5-height));
+		double angle = Math.atan2((point.y-center.y),(point.x-center.x));
+		double diag = Math.sqrt(width*width+height*height)/2;
+		return new Coordinate(point.x-(diag*Math.cos(angle)),point.y-(diag*Math.sin(angle)));
 	}
 	
 	//checks to make sure the gap is wide enough
@@ -314,7 +316,7 @@ public class Robot{
 				double cDis = distance(locate,current);
 				if(Math.abs(cDis-range)<0.00001 && checkGap(current,index,newSense)){
 					System.out.println("here3");
-					//current = calcShift(current);
+					current = calcShift(current);
 					if(iterate(current)){
 						System.out.println("here4");
 						return true;

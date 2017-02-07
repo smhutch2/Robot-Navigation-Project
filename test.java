@@ -34,11 +34,12 @@ class test {
 		//Coordinate pos = new Coordinate(0,20); 
 		//							x, y, t,  h,  w,  s,  d, angleRange, f         , pos, re,
 	//	Robot testRobot = new Robot(0, 0, Math.PI/4, 10, 10, 1, Math.PI/10,100,Math.PI/2,0,new Coordinate(0,0),17,landmarks, new Coordinate(0,100));
-		Robot testRobot = new Robot(50, 0, 2*Math.PI/3, 20, 20, 1, Math.PI/10, 30, Math.PI/2, 0.0d, new Coordinate(0, 0), 17.0d, landmarks, new Coordinate(0,100));
-		testRobot.navigate();
-		for(int i = 0; i<testRobot.steps.size();i++){
+		Robot testRobot = new Robot(0, 0, 2*Math.PI/3, 20, 20, 1, Math.PI/10, 30, Math.PI/2, 0.0d, new Coordinate(0, 0), 17.0d, landmarks, new Coordinate(0,100));
+		System.out.println(testRobot.calcShift(new Coordinate(-20,-50)).x+"\t"+testRobot.calcShift(new Coordinate(-20,-50)).y);
+		//testRobot.navigate();
+		/*for(int i = 0; i<testRobot.steps.size();i++){
 			System.out.println(testRobot.steps.get(i).x+"\t"+testRobot.steps.get(i).y);
-		}
+		}*/
 
 	/*	testRobot.goPos(new Coordinate(10,10));
 		
