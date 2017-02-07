@@ -39,7 +39,7 @@ public class Environment{
 		borderSegList.add(rightBorder);
 
 		//robotPos had preset val for x, now random
-		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 700);
+		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 650);
 		//was width/2 for goalPos x val, now random
 		this.goalPos = new Coordinate(posRand.nextInt(400) + 300, 50);
 		this.robotSize = width/20;
@@ -50,7 +50,7 @@ public class Environment{
 
 		randomLandmarksRadialV2();
 
-		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/40, robotSize*1.5, Math.PI/2, 0.0d, new Coordinate(0, 0), 17.0d, landmarks, goalPos);
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/40, robotSize, Math.PI/2, 0.0d, new Coordinate(0, 0), 17.0d, landmarks, goalPos);
 
 	}
 
