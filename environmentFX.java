@@ -13,32 +13,32 @@ import RobotDir.*;
 import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-//import java.lang.Math;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.event.*;
 import javafx.scene.paint.Color;
 
-public class testFX extends Application{
+public class environmentFX extends Application{
 
 	public double width = 1000.0;
 	public double height = 1000.0;
 	public int i = 0;
 	public ArrayList<Coordinate> coordList = new ArrayList();
 	public ArrayList<Double> angleList = new ArrayList();
-	public ArrayList<Coordinate[]> readings = new ArrayList();
-	
+
 	//image representing the robot
 	public Image roboImage = new Image("RoboImage2.jpg");
 	public ImageView robotImage = new ImageView();
 	public Group rootNode = new Group();
 
+	//animation slider
+	public Slider aniSlider = new Slider(0, 1, 0);
+
 	public void start(Stage stage){
 
 		stage.setTitle("JavaFX Window");
 
- 
    		Scene myScene = new Scene(rootNode, width, height);
 		stage.setScene(myScene);
 		Canvas myCanvas = new Canvas(width, height);
@@ -70,7 +70,7 @@ public class testFX extends Application{
 		robotImage.setImage(roboImage);
 		robotImage.setFitHeight(testEnvi.robot.height);
 		robotImage.setFitWidth(testEnvi.robot.width);
-		
+
         //set X and Y to robot center val
         robotImage.setX(testEnvi.robotPos.x);
         robotImage.setY(testEnvi.robotPos.y);
@@ -97,22 +97,27 @@ public class testFX extends Application{
 		angleList = testEnvi.robot.angles;
 
         TimerControl timer = new TimerControl();
-        timer.TEST = this;
         Button startAni = new Button("Start");
 		Button stopAni = new Button("Stop");
 		Button resetAni = new Button("Reset");
 		Button resetEnvi = new Button("Reset Environment");
+		
+		timer.TEST = this;
+
+		aniSlider.relocate(0, 200);
+		aniSlider.setShowTickMarks(true);
+ 		aniSlider.setShowTickLabels(true);
+ 		aniSlider.setMajorTickUnit(0.5f);
 
 		startAni.relocate(0, 0);
 		stopAni.relocate(0, 50);
 		resetAni.relocate(0, 100);
 		resetEnvi.relocate(0, 150);
-		rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi);
+		rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi, aniSlider);
 
 
         startAni.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-
 
             	timer.start();
 
@@ -131,6 +136,7 @@ public class testFX extends Application{
             @Override public void handle(ActionEvent e) {
 
             	timer.count = 0;
+            	aniSlider.adjustValue(0);
 
             }
         });
@@ -191,17 +197,12 @@ public class testFX extends Application{
 
 				coordList = testEnvi.robot.steps;
 				angleList = testEnvi.robot.angles;
-				readings = testEnvi.robot.readings;
-				
-
-				
 				timer.stop();
 				timer.count = 0;
 				rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi);
 
             }
         });
-
 
 
 		stage.show();
@@ -211,10 +212,10 @@ public class testFX extends Application{
 	//printing the solution
 	public void PrintNextStep(int step){
 
-			if(step<coordList.size()){
+			if(step<=coordList.size()){
+				
 				double x = coordList.get(step).x;
 				double y = coordList.get(step).y;
-				
 				robotImage.setX(x);
 				robotImage.setY(y);
 				robotImage.setRotate((180/Math.PI)*angleList.get(step)+90);
@@ -222,6 +223,7 @@ public class testFX extends Application{
 				prevPos.toBack();
 				rootNode.getChildren().add(prevPos);
 				robotImage.toFront();
+
 			}
 
     }
