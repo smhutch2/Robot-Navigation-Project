@@ -7,6 +7,8 @@ import java.util.*;
 
 public class Robot{
 
+//----- Variables -----
+
 	//Robot characteristics
 	public double height;
 	public double width;
@@ -16,7 +18,6 @@ public class Robot{
 	public double range;
 	public double angleRange;
 	public double res;
-	public double diag;
 
 	//Robot position variables
 	public Coordinate center;
@@ -38,6 +39,8 @@ public class Robot{
 	public long its;
 	public double threshold;
 
+//----- Constructor -----	
+
 	//res needs to be odd,
 	public Robot(double x, double y, double theta, double height, double width, double speed, double turnspeed, double range, double angleRange, double facing, Coordinate pos, double res, ArrayList<Landmark> landmarks, Coordinate goalPos) {
 		center = new Coordinate(x,y);
@@ -56,44 +59,23 @@ public class Robot{
 		mainSensor = new Sensor(range, angleRange, facing, pos, res, landmarks);
 		steps = new ArrayList();
 		angles = new ArrayList();
-		setDiag();
 	}	
 	
-	//moves center according to where front is 
-	public Coordinate calcShift(Coordinate point){
-		double angle = Math.atan2((point.y-center.y),(point.x-center.x));
-		double diag = Math.sqrt(width*width+height*height)/2;
-		return new Coordinate(point.x-(diag*Math.cos(angle)),point.y-(diag*Math.sin(angle)));
+//----- General Methods -----
+
+	//rounds numbers
+	public double round(double num){
+		if(num < 0.000001 && num > -0.000001) num = 0;
+		return num;
+	}	
+	
+	//calculates the distance between coordinates
+ 	public double distance(Coordinate c1, Coordinate c2){
+		LineSeg length = new LineSeg(c1,c2);
+		return length.getMagnitude();		
 	}
 	
-	//checks to make sure the gap is wide enough
- 	public boolean checkGap(Coordinate reading, int index, Coordinate[] newSense){
-		if(newSense != null){
-			double angle = Math.PI; 
-			double tempangle = Math.PI;
-			boolean there = false;
-			double length =0;
-			for(int i = 0; i < newSense.length;i++){			
-				length = distance(newSense[i],center);
-				if(length<range-0.00001){
-					tempangle = (angleRange/res)*Math.abs(index-i);
-					there = true;
-					if(tempangle < angle) angle = tempangle;
-				}
-			}
-			double gap = Math.sin(angle)*length;
-			
-			if(there == false){
-				return true;
-			}
-			return (gap>width/2);
-		}
-		return true;
-	} 
-	
-	private void setDiag(){
-		diag = Math.sqrt(width*width+height*height)/2;
-	}
+//----- Robot Methods -----	
 	
 	//updates the corners of the robot based on the center position and the angle
 	public void updateCorners() {
@@ -121,17 +103,6 @@ public class Robot{
 		
 	}	
 	
-	//updates sensor array
-	public void readSensor(Coordinate[] newSense){
-		mainSensor.sense(center,theta,newSense);
-	}
-	
-	//rounds numbers
-	public double round(double num){
-		if(num < 0.000001 && num > -0.000001) num = 0;
-		return num;
-	}
-	
 	//checks if it is hitting any landmarks
 	public boolean checkContact(){
 		LineSeg temp;
@@ -150,9 +121,9 @@ public class Robot{
 			}
 		}
 		return false;
-	}
+	}	
 
- 	//rotates robot incrementally towards given heading; returns true when there
+	//rotates robot incrementally towards given heading; returns true when there
 	public boolean rotate(double heading){
 		double tSpeed;
 		boolean there;
@@ -241,7 +212,7 @@ public class Robot{
 		return true;
 	} 
 	
-	//this reverses failed contact
+	//this reverses after failed contact
 	public boolean reverse(Coordinate point){
 		if(distance(center,point)<0.00001) return true;
 		theta = Math.atan2((center.y-point.y),(center.x-point.x));
@@ -268,6 +239,54 @@ public class Robot{
 		}
 		return true;
 	} 
+
+//----- Sensor Methods -----
+	
+	//adjusts sensor reading to minimize contact
+	public Coordinate calcShift(Coordinate point){
+		double angle = Math.atan2((point.y-center.y),(point.x-center.x));
+		double diag = Math.sqrt(width*width+height*height)/2;
+		return new Coordinate(point.x-(diag*Math.cos(angle)),point.y-(diag*Math.sin(angle)));
+	}
+	
+	//checks to make sure the gap is wide enough
+ 	public boolean checkGap(Coordinate reading, int index, Coordinate[] newSense){
+		if(newSense != null){
+			double angle = Math.PI; 
+			double tempangle = Math.PI;
+			boolean there = false;
+			double length =0;
+			for(int i = 0; i < newSense.length;i++){			
+				length = distance(newSense[i],center);
+				if(length<range-0.00001){
+					tempangle = (angleRange/res)*Math.abs(index-i);
+					there = true;
+					if(tempangle < angle) angle = tempangle;
+				}
+			}
+			double gap = Math.sin(angle)*length;
+			
+			if(there == false){
+				return true;
+			}
+			return (gap>width/2);
+		}
+		return true;
+	} 
+	
+	//updates sensor array
+	public void readSensor(Coordinate[] newSense){
+		mainSensor.sense(center,theta,newSense);
+	}
+	
+	
+//----- Navigation Methods ----- 
+	
+	//calls the recursive method to navigate
+	public void navigate(){
+		iterate(center);
+
+	}
 	
 	//this is the recursive method that navigates towards the destination
 	public boolean iterate(Coordinate locate){
@@ -307,13 +326,15 @@ public class Robot{
 		//the following code runs a loop that tries different points, this is essential to recursion
 		Coordinate current = newSense[(int)(newSense.length/2)];
 		int index = (int)(newSense.length/2);
+		//this for loop starts from the center index and increments alteranately to the left and right
 		for(int i = 0; i < (int)(newSense.length/2)+1; i++){
 			for(int k = 0; k<=1;k++){
-				if(k == 1)index = (int)(newSense.length/2) - i; //these are reversed for testing purposes
+				if(k == 1)index = (int)(newSense.length/2) - i;
 				if(k == 0)index = (int)(newSense.length/2) + i;
 				if(i == 0 && k == 1) break;
 				current = newSense[index];
 				double cDis = distance(locate,current);
+				//only enters if when there is a maximum reading and there is a big enough gap
 				if(Math.abs(cDis-range)<0.00001 && checkGap(current,index,newSense)){
 					System.out.println("here3");
 					current = calcShift(current);
@@ -324,7 +345,6 @@ public class Robot{
 					else{
 						reverse(locate);	
 						its--;
-						
 					}
 				} 				
 			}
@@ -334,24 +354,11 @@ public class Robot{
 		return false;
 	}
 	
-	//calculates the distance between coordinates
- 	public double distance(Coordinate c1, Coordinate c2){
-		LineSeg length = new LineSeg(c1,c2);
-		return length.getMagnitude();		
-	}
-	
-	//calls the recursive method to navigate
-	public void navigate(){
-		iterate(center);
-
-	}
-	
 	//saves a position so that it can be illustrated later
 	public void save(){
 		Coordinate temp = new Coordinate(center.x, center.y);
 		steps.add(temp);
 		angles.add(theta);
-		//readings.add(newSense);
 	}
 	
 }

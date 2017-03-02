@@ -96,15 +96,6 @@ public class LineSeg {
 			y = ends[0].y + scalar1*direction.y;
 		}
 		
- /* 		System.out.println("First Vector:\nend1 x: "+ends[0].x+" y: "+ends[0].y);
-		System.out.println("end2: x: "+ends[1].x+" y: "+ends[1].y);
-		System.out.println("direction: x: "+direction.x+" y: "+direction.y);
-		System.out.println("Second Vector:\nend1 x: "+intersect.ends[0].x+" y: "+intersect.ends[0].y);
-		System.out.println("end2: x: "+intersect.ends[1].x+" y: "+intersect.ends[1].y);
-		System.out.println("direction: x: "+intersect.direction.x+" y: "+intersect.direction.y);	 
-		System.out.println(x+"\t"+y); */
-		
-		
 		//checks if it is in the range and domain of the lines
 		hits = inBetween(ends[0].x, ends[1].x, x) && inBetween(ends[0].y, ends[1].y, y) && inBetween(intersect.ends[0].x, intersect.ends[1].x, x) && inBetween(intersect.ends[0].y, intersect.ends[1].y, y);
 		
@@ -130,6 +121,7 @@ public class LineSeg {
 		return work;
 	}
 	
+	//calculates the magnitude of a lineseg
 	public double getMagnitude(){
 		double xdis = Math.abs(ends[1].x-ends[0].x);
 		double ydis = Math.abs(ends[1].y-ends[0].y);
