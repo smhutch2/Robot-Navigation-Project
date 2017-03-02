@@ -31,6 +31,7 @@ public class environmentFX extends Application{
 	public Image roboImage = new Image("RoboImage2.jpg");
 	public ImageView robotImage = new ImageView();
 	public Group rootNode = new Group();
+	public boolean isRunning = false;
 
 	//animation slider
 	public Slider aniSlider = new Slider(0, 1, 0);
@@ -103,6 +104,7 @@ public class environmentFX extends Application{
 		Button resetEnvi = new Button("Reset Environment");
 		
 		timer.TEST = this;
+		
 
 		aniSlider.relocate(0, 200);
 		aniSlider.setShowTickMarks(true);
@@ -120,6 +122,7 @@ public class environmentFX extends Application{
             @Override public void handle(ActionEvent e) {
 
             	timer.start();
+            	IsRunning();
 
             }
         });
@@ -127,7 +130,9 @@ public class environmentFX extends Application{
         stopAni.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
+            	boolean running = isRunning;
             	timer.stop();
+            	NotRunning();
 
             }
         });
@@ -137,9 +142,45 @@ public class environmentFX extends Application{
 
             	timer.count = 0;
             	aniSlider.adjustValue(0);
+            	PrintNextStep(0);
 
             }
         });
+
+
+        //WORK ON THIS YO???
+        ////////////////////
+
+        aniSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+   			final int step;
+   			final boolean running = isRunning;
+
+   			////WIP
+   			if(running == true){
+
+   			}
+   			else{
+
+   				step = (int)Math.floor((double)coordList.size()*(double)newValue) - 1;
+
+   				System.out.println(step);
+
+   				if(step == -1){
+   					PrintNextStep(step+1);
+   				}
+   				else{
+   					PrintNextStep(step);
+   				}
+
+   				timer.count = step;
+
+   			}
+
+		});
+
+
+
 
 
         ////////////////WIP////////////////
@@ -198,8 +239,10 @@ public class environmentFX extends Application{
 				coordList = testEnvi.robot.steps;
 				angleList = testEnvi.robot.angles;
 				timer.stop();
+				NotRunning();
 				timer.count = 0;
-				rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi);
+				aniSlider.adjustValue(0);
+				rootNode.getChildren().addAll(startAni, stopAni, resetAni, resetEnvi, aniSlider);
 
             }
         });
@@ -209,11 +252,22 @@ public class environmentFX extends Application{
 
 	}
 
+	public void NotRunning(){
+
+		isRunning = false;
+
+	}
+	public void IsRunning(){
+
+		isRunning = true;
+		
+	}
+
 	//printing the solution
 	public void PrintNextStep(int step){
 
 			if(step<=coordList.size()){
-				
+
 				double x = coordList.get(step).x;
 				double y = coordList.get(step).y;
 				robotImage.setX(x);

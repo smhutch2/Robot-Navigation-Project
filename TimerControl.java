@@ -15,12 +15,20 @@ public class TimerControl extends AnimationTimer{
     public void handle(long currentNanoTime){
         		
         if((currentNanoTime-last) >= 1000){
-        
-        	count++;
-      		TEST.PrintNextStep(count);
-          TEST.aniSlider.adjustValue((double)count/TEST.coordList.size());
-       		last = currentNanoTime;
-          
+
+          if(count == TEST.coordList.size() - 1){
+
+            this.stop();
+
+          }
+
+          else{
+            	count++;
+      	   	  TEST.PrintNextStep(count);
+              TEST.aniSlider.adjustValue((double)count/TEST.coordList.size());
+       	  	  last = currentNanoTime;
+          }
+
        	}   		
     }
 

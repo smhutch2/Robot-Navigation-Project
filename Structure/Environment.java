@@ -145,7 +145,7 @@ public class Environment{
  				if(spacingAngle <= 2*Math.PI){
 
 					vertice = vertices.nextInt(17) + 3;
-					theta = (angle.nextInt(150) + 50 - (j * 5))/radius;
+					theta = (angle.nextInt(150) + 75 - (j * 5))/radius;
 					y = Math.sin(theta + spacingAngle) * radius;
 					x = Math.cos(theta + spacingAngle) * radius + width/2;
 					Coordinate xy = new Coordinate(x, y);
