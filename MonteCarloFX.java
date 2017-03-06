@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.event.*;
 import javafx.scene.paint.Color;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
 
 
 public class MonteCarloFX extends Application{
@@ -38,6 +39,9 @@ public class MonteCarloFX extends Application{
 	public Label successes;
     public Label avgStep;
 
+    public Font font1 = new Font(30.0);
+    public Font font2 = new Font(20.0);
+
 
 	public void start(Stage stage){
 
@@ -47,19 +51,19 @@ public class MonteCarloFX extends Application{
 		Canvas myCanvas = new Canvas(width, height);
 
 		Label titleText = new Label("Monte Carlo Simulation");
-		titleText.setStrokeWidth(10.0);
+		titleText.setFont(font1);
 
 		TextField range = new TextField("50 - 150");
 		Label rangeLabel = new Label("Sensor Range: 100");
 		rangeLabel.relocate(100, 80);
 		range.relocate(100, 100);
 
-		TextField res = new TextField("9 - 21 (odd)");
+		TextField res = new TextField("9 - 21 (odd numbers)");
 		Label resLabel = new Label("Sensor Resolution: 11");
 		resLabel.relocate(100, 180);
 		res.relocate(100, 200);
 
-		TextField angleRange = new TextField("PI/4 - PI");
+		TextField angleRange = new TextField("PI/4 - PI (radians)");
 		Label angleRangeLabel = new Label("Sensor Angle Range: PI/2");
 		angleRangeLabel.relocate(100, 280);
 		angleRange.relocate(100, 300);
@@ -152,11 +156,14 @@ public class MonteCarloFX extends Application{
 
             	System.out.println("Average Steps: " + avg);
 
-            	successes = new Label("Successes: " + success);
+            	successes = new Label("Success Percentage: " + (double)success*100/trialsVal + "%");
             	avgStep = new Label("Average Steps: " + avg);
 
             	successes.relocate(350, 450);
             	avgStep.relocate(350, 500);
+
+            	successes.setFont(font2);
+    			avgStep.setFont(font2);
 
             	rootNode.getChildren().addAll(successes, avgStep);
 
