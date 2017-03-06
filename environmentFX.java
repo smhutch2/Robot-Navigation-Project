@@ -164,7 +164,6 @@ public class environmentFX extends Application{
 
    				step = (int)Math.floor((double)coordList.size()*(double)newValue) - 1;
 
-   				System.out.println(step);
 
    				if(step == -1){
    					PrintNextStep(step+1);
