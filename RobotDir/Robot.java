@@ -294,24 +294,24 @@ public class Robot{
 	public boolean iterate(Coordinate locate){
 		its++;
 		if(its>200){
-			System.out.println("Failure");
+			//System.out.println("Failure");
 			worked= false;
 			return true;
 		}
-		System.out.println(its);
+		//System.out.println(its);
 
 		//if its at the destination it will bubble back up
 		if(distance(center,goalPos)<0.00001) return true;
 
 		//tries to go toward position given, and returns false it if fails
 		if(!goPos(locate)){
-			System.out.println("here5");
+			//System.out.println("here5");
 			return false;
 		} 
 		
 		//tries to turn, returns false if fails
 		if(!turnDes()){
-			System.out.println("here6");			
+			//System.out.println("here6");			
 			return false;
 		}	
 		
@@ -321,7 +321,7 @@ public class Robot{
 
 		//if it is closer to destination than sensor range, 
 		if(range > distance(goalPos,center)){
-			System.out.println("here2");
+			//System.out.println("here2");
 			return goPos(new Coordinate(goalPos.x,goalPos.y));
 		} 
 		
@@ -339,10 +339,10 @@ public class Robot{
 				double cDis = distance(locate,current);
 				//only enters if when there is a maximum reading and there is a big enough gap
 				if(Math.abs(cDis-range)<0.00001 && checkGap(current,index,newSense)){
-					System.out.println("here3");
+					//System.out.println("here3");
 					current = calcShift(current);
 					if(iterate(current)){
-						System.out.println("here4");
+						//System.out.println("here4");
 						return true;
 					}
 					else{
@@ -353,7 +353,7 @@ public class Robot{
 			}
 		}		
 
-		System.out.println("here1");
+		//System.out.println("here1");
 		return false;
 	}
 	
