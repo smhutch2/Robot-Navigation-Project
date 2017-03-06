@@ -120,7 +120,7 @@ public class MonteCarloFX extends Application{
 
             	}
 
-            	System.out.println(success);
+            	System.out.println("Amount of successes: " + success);
             	i = 0;
 
             	while(i <= stepList.size()){
@@ -131,7 +131,7 @@ public class MonteCarloFX extends Application{
 
             	double avg = k / stepList.size();
 
-            	System.out.println(avg);
+            	System.out.println("Average Steps: " + avg);
             	success = 0;
             	stepList.clear();
 
