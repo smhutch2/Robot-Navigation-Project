@@ -42,8 +42,28 @@ public class Robot{
 
 //----- Constructor -----	
 
-	//res needs to be odd,
+	//general constructor
 	public Robot(double x, double y, double theta, double height, double width, double speed, double turnspeed, double range, double angleRange, double facing, Coordinate pos, double res, ArrayList<Landmark> landmarks, Coordinate goalPos) {
+		center = new Coordinate(x,y);
+		this.height = height;
+		this.width = width;
+		this.speed = speed;
+		this.theta = theta;
+		this.landmarks = landmarks;
+		this.turnspeed = turnspeed;
+		this.goalPos = goalPos;
+		this.range = range;
+		this.angleRange = angleRange;
+		this.res = res;
+		updateCorners();
+		mainSensor = new Sensor(range, angleRange, facing, pos, res, landmarks);
+		steps = new ArrayList();
+		angles = new ArrayList();
+		threshold = 200;
+	}	
+	
+	//montecarlo constructor
+	public Robot(double x, double y, double theta, double height, double width, double speed, double turnspeed, double range, double angleRange, double facing, Coordinate pos, double res, ArrayList<Landmark> landmarks, Coordinate goalPos, double threshold) {
 		center = new Coordinate(x,y);
 		this.height = height;
 		this.width = width;
@@ -293,7 +313,7 @@ public class Robot{
 	//this is the recursive method that navigates towards the destination
 	public boolean iterate(Coordinate locate){
 		its++;
-		if(its>200){
+		if(its>threshold){
 			//System.out.println("Failure");
 			worked= false;
 			return true;
