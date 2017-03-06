@@ -39,11 +39,10 @@ public class Environment{
 		borderSegList.add(rightBorder);
 
 		//robotPos had preset val for x, now random
-		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 700);
+		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 650);
 		//was width/2 for goalPos x val, now random
 		this.goalPos = new Coordinate(posRand.nextInt(400) + 300, 50);
 		this.robotSize = width/20;
-
 
 		Landmark borderLandmark = new Landmark(borderSegList, borderSegList.size());
 		landmarks.add(borderLandmark);
@@ -68,7 +67,7 @@ public class Environment{
 				
 
 				if(j == 4){
-				//	landmarkAr[i][j] = null;
+
 				}
 				else{
 					vertices = rand.nextInt(22) + 3;
@@ -88,7 +87,6 @@ public class Environment{
 
 		Random angle = new Random();
 		Random vertices = new Random();
-
 		double theta;
 		double radius;
 		int vertice;
@@ -98,22 +96,15 @@ public class Environment{
 		int j, i;
 		int layers = 3;
 
-		System.out.println("In Rand Rad!");
-
 		for(j = 1 ; j < layers ; j++){
 
 			radius = (j * 200) + 100;
 			spacingAngle = spacing / radius;
-			//theta = angle.nextDouble() * Math.PI;
 			theta = spacingAngle;
-
-			System.out.println(radius+" Layer Loop " + Math.floor((Math.PI - theta) * radius / spacing));
 			
 			int landmarkAmount = (int)Math.floor((Math.PI - theta) * radius / spacing);
 
 			for(i = 0 ; i < landmarkAmount ; i++){
-
-				System.out.println("LM Loop");
 
 				vertice = vertices.nextInt(17) + 3;
 				y = Math.sin(theta) * radius;
@@ -121,8 +112,6 @@ public class Environment{
 				Coordinate xy = new Coordinate(x, y);
 				landmarks.add(randomLandmark(robotSize/2, vertice, xy));
 				theta += spacingAngle;
-
-				System.out.println(x+ "  " +y);
 
 			}
 
@@ -134,7 +123,6 @@ public class Environment{
 
 		Random angle = new Random();
 		Random vertices = new Random();
-
 		double theta;
 		double radius;
 		int vertice;
@@ -144,29 +132,26 @@ public class Environment{
 		int j, i;
 		int layers = 4;
 
-		System.out.println("In Rand RadV2!");
-
 		for(j = 1 ; j < layers ; j++){
 
 			spacingAngle = 0;
 			theta = 0;
-			radius = (j * 150) + 100;
-			System.out.println("Layer Loop: " + j);			
+			radius = (j * 150) + 100;	
 			int landmarkAmount = (int)Math.floor((Math.PI - theta) * radius / spacing) + j * 5;
-			System.out.println("Landmark Amount: " + landmarkAmount);
 
 
 			for(i = 0 ; i < landmarkAmount ; i++){
 
-				System.out.println("LM Loop: " + i + "     Angle Sum: " + spacingAngle);
  				if(spacingAngle <= 2*Math.PI){
+
 					vertice = vertices.nextInt(17) + 3;
-					theta = (angle.nextInt(150) + 50 - (j * 5))/radius;
+					theta = (angle.nextInt(150) + 75 - (j * 5))/radius;
 					y = Math.sin(theta + spacingAngle) * radius;
 					x = Math.cos(theta + spacingAngle) * radius + width/2;
 					Coordinate xy = new Coordinate(x, y);
 					landmarks.add(randomLandmark(robotSize/2, vertice, xy));
 					spacingAngle += theta;
+
 				}
 
 			}
@@ -214,7 +199,6 @@ public class Environment{
 
 		}
 
-		//System.out.println(lineSegList.size());
 		landmark = new Landmark(lineSegList, vertices);
 		return landmark;
 
