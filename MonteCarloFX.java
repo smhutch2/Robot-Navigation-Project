@@ -22,19 +22,22 @@ import javafx.scene.control.TextField;
 
 public class MonteCarloFX extends Application{
 
-	public double width = 400.0;
-	public double height = 600.0;
+	public double width = 500.0;
+	public double height = 750.0;
 	public double eWidth = 1000;
 	public double eHeight = 1000;
 	public Group rootNode = new Group();
 	public int trialsVal = 100;
-	public double rangeVal = eWidth/20;
+	public double rangeVal = eWidth/10;
 	public double resVal = 11.0;
 	public double angleRangeVal = Math.PI/2;
 	public double speedVal = eWidth/2000;
 
 	public int success = 0;
 	public ArrayList<Integer> stepList = new ArrayList();
+	public Label successes;
+    public Label avgStep;
+
 
 	public void start(Stage stage){
 
@@ -44,16 +47,31 @@ public class MonteCarloFX extends Application{
 		Canvas myCanvas = new Canvas(width, height);
 
 		Label titleText = new Label("Monte Carlo Simulation");
+		titleText.setStrokeWidth(10.0);
 
-		TextField range = new TextField("Sensor Range");
+		TextField range = new TextField("50 - 150");
+		Label rangeLabel = new Label("Sensor Range: 100");
+		rangeLabel.relocate(100, 80);
 		range.relocate(100, 100);
-		TextField res = new TextField("Sensor Resolution");
+
+		TextField res = new TextField("9 - 21 (odd)");
+		Label resLabel = new Label("Sensor Resolution: 11");
+		resLabel.relocate(100, 180);
 		res.relocate(100, 200);
-		TextField angleRange = new TextField("Sensor Angle Range");
+
+		TextField angleRange = new TextField("PI/4 - PI");
+		Label angleRangeLabel = new Label("Sensor Angle Range: PI/2");
+		angleRangeLabel.relocate(100, 280);
 		angleRange.relocate(100, 300);
-		TextField speed = new TextField("Robot Movement Speed");
+
+		TextField speed = new TextField("0.5");
+		Label speedLabel = new Label("Robot Movement Speed: 0.5");
+		speedLabel.relocate(100, 380);
 		speed.relocate(100, 400);
-		TextField trials = new TextField("Trials");
+
+		TextField trials = new TextField("n trials");
+		Label trialsLabel = new Label("Trials: 100");
+		trialsLabel.relocate(100, 480);
 		trials.relocate(100, 500);
 
 		Button run = new Button("Run Simulation");
@@ -62,7 +80,7 @@ public class MonteCarloFX extends Application{
 
 		
 
-		rootNode.getChildren().addAll(myCanvas, run, speed, trials, titleText, range, res, angleRange);
+		rootNode.getChildren().addAll(myCanvas, rangeLabel, resLabel, angleRangeLabel, speedLabel, trialsLabel, run, speed, trials, titleText, range, res, angleRange);
 		stage.show();
 
 		range.setOnAction(new EventHandler<ActionEvent>() {
@@ -112,6 +130,8 @@ public class MonteCarloFX extends Application{
             	int i = 0;
             	int k = 0;
 
+            	rootNode.getChildren().removeAll(successes, avgStep);
+
           		while(i < trialsVal){
 
           			Environment testEnvi = new Environment(eWidth, eHeight, rangeVal, resVal, angleRangeVal, speedVal);
@@ -120,10 +140,9 @@ public class MonteCarloFX extends Application{
 
             	}
 
-            	System.out.println("Amount of successes: " + success);
-            	i = 0;
+            	System.out.println("Successes: " + success);
 
-            	while(i <= stepList.size()){
+            	for(i = 0 ; i < stepList.size() ; i ++){
 
             		k += stepList.get(i);
 
@@ -132,6 +151,15 @@ public class MonteCarloFX extends Application{
             	double avg = k / stepList.size();
 
             	System.out.println("Average Steps: " + avg);
+
+            	successes = new Label("Successes: " + success);
+            	avgStep = new Label("Average Steps: " + avg);
+
+            	successes.relocate(350, 450);
+            	avgStep.relocate(350, 500);
+
+            	rootNode.getChildren().addAll(successes, avgStep);
+
             	success = 0;
             	stepList.clear();
 
@@ -146,7 +174,11 @@ public class MonteCarloFX extends Application{
 		if(testEnvi.robot.navigate()){
 
 			success++;
+			System.out.println("SOLVED     Steps: " + testEnvi.robot.steps.size());
 
+		}
+		else{
+			System.out.println("FAIL");
 		}
 
 		stepList.add(testEnvi.robot.steps.size());
