@@ -52,6 +52,38 @@ public class Environment{
 		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, robotSize/100, Math.PI/40, robotSize*2, Math.PI/2, 0.0d, new Coordinate(0, 0), 11.0d, landmarks, goalPos);
 
 	}
+//// // // ////
+	public Environment(double width, double height, double range, double res, double angleRange, double speed){
+
+		ArrayList<LineSeg> borderSegList = new ArrayList();
+		Random posRand = new Random();
+		this.landmarks = new ArrayList<>();
+		this.width = width;
+		this.height = height;
+		this.bottomBorder = new LineSeg(new Coordinate(0.0, 0.0), new Coordinate(width, 0.0));
+		this.topBorder = new LineSeg(new Coordinate(0.0, height), new Coordinate(width, height));
+		this.leftBorder = new LineSeg(new Coordinate(0.0, height), new Coordinate(0.0, 0.0));
+		this.rightBorder = new LineSeg(new Coordinate(width, height), new Coordinate(width, 0.0));
+
+		borderSegList.add(bottomBorder);
+		borderSegList.add(topBorder);
+		borderSegList.add(leftBorder);
+		borderSegList.add(rightBorder);
+
+		//robotPos had preset val for x, now random
+		this.robotPos = new Coordinate(posRand.nextInt(800) + 100, 650);
+		//was width/2 for goalPos x val, now random
+		this.goalPos = new Coordinate(posRand.nextInt(400) + 300, 50);
+		this.robotSize = width/20;
+
+		Landmark borderLandmark = new Landmark(borderSegList, borderSegList.size());
+		landmarks.add(borderLandmark);
+
+		randomLandmarksRadialV2();
+
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, speed, Math.PI/40, range, angleRange, 0.0d, new Coordinate(0, 0), res, landmarks, goalPos);
+
+	}
 
 	//this environment creates randomly generated landmarks in a grid-like pattern
 	public void randomLandmarks(){
@@ -145,7 +177,7 @@ public class Environment{
  				if(spacingAngle <= 2*Math.PI){
 
 					vertice = vertices.nextInt(17) + 3;
-					theta = (angle.nextInt(150) + 75 - (j * 5))/radius;
+					theta = (angle.nextInt(150) + 50 - (j * 5))/radius;
 					y = Math.sin(theta + spacingAngle) * radius;
 					x = Math.cos(theta + spacingAngle) * radius + width/2;
 					Coordinate xy = new Coordinate(x, y);
