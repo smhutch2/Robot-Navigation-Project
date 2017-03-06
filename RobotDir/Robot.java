@@ -38,6 +38,7 @@ public class Robot{
 	public ArrayList<Coordinate> hits = new ArrayList();
 	public long its;
 	public double threshold;
+	public boolean worked = true;
 
 //----- Constructor -----	
 
@@ -283,9 +284,10 @@ public class Robot{
 //----- Navigation Methods ----- 
 	
 	//calls the recursive method to navigate
-	public void navigate(){
+	public boolean navigate(){
+		worked = true;
 		iterate(center);
-
+		return worked;
 	}
 	
 	//this is the recursive method that navigates towards the destination
@@ -293,6 +295,7 @@ public class Robot{
 		its++;
 		if(its>200){
 			System.out.println("Failure");
+			worked= false;
 			return true;
 		}
 		System.out.println(its);
