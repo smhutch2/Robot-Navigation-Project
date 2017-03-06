@@ -53,7 +53,7 @@ public class Environment{
 
 	}
 //// // // ////
-	public Environment(double width, double height, double range, double res, double angleRange, double speed){
+	public Environment(double width, double height, double range, double res, double angleRange, double speed, double threshold){
 
 		ArrayList<LineSeg> borderSegList = new ArrayList();
 		Random posRand = new Random();
@@ -81,7 +81,7 @@ public class Environment{
 
 		randomLandmarksRadialV2();
 
-		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, speed, Math.PI/40, range, angleRange, 0.0d, new Coordinate(0, 0), res, landmarks, goalPos);
+		robot = new Robot(robotPos.x, robotPos.y, Math.PI/2, robotSize, robotSize, speed, Math.PI/40, range, angleRange, 0.0d, new Coordinate(0, 0), res, landmarks, goalPos, threshold);
 
 	}
 

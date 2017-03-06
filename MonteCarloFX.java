@@ -33,6 +33,7 @@ public class MonteCarloFX extends Application{
 	public double resVal = 11.0;
 	public double angleRangeVal = Math.PI/2;
 	public double speedVal = eWidth/2000;
+	public double thresholdVal = 200;
 
 	public int success = 0;
 	public ArrayList<Integer> stepList = new ArrayList();
@@ -73,18 +74,23 @@ public class MonteCarloFX extends Application{
 		speedLabel.relocate(100, 380);
 		speed.relocate(100, 400);
 
+		TextField threshold = new TextField("50 - 200");
+		Label thresholdLabel = new Label("Failure Threshold: 200");
+		thresholdLabel.relocate(100, 480);
+		threshold.relocate(100, 500);
+
 		TextField trials = new TextField("n trials");
 		Label trialsLabel = new Label("Trials: 100");
-		trialsLabel.relocate(100, 480);
-		trials.relocate(100, 500);
+		trialsLabel.relocate(100, 580);
+		trials.relocate(100, 600);
 
 		Button run = new Button("Run Simulation");
-		run.relocate(100, 600);
+		run.relocate(100, 650);
 
 
 		
 
-		rootNode.getChildren().addAll(myCanvas, rangeLabel, resLabel, angleRangeLabel, speedLabel, trialsLabel, run, speed, trials, titleText, range, res, angleRange);
+		rootNode.getChildren().addAll(myCanvas, rangeLabel, resLabel, angleRangeLabel, speedLabel, trialsLabel, thresholdLabel, threshold, run, speed, trials, titleText, range, res, angleRange);
 		stage.show();
 
 		range.setOnAction(new EventHandler<ActionEvent>() {
@@ -119,6 +125,15 @@ public class MonteCarloFX extends Application{
             }
         });
 
+        threshold.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+
+            	thresholdVal = Double.parseDouble(threshold.getText());
+            	System.out.println(thresholdVal);
+
+            }
+        });
+
         trials.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
 
@@ -138,7 +153,7 @@ public class MonteCarloFX extends Application{
 
           		while(i < trialsVal){
 
-          			Environment testEnvi = new Environment(eWidth, eHeight, rangeVal, resVal, angleRangeVal, speedVal);
+          			Environment testEnvi = new Environment(eWidth, eHeight, rangeVal, resVal, angleRangeVal, speedVal, thresholdVal);
           			iterate(testEnvi);
           			i++;
 

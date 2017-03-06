@@ -46,7 +46,7 @@ public class environmentFX extends Application{
 
 		//new environment created
 		Environment testEnvi = new Environment(width, height);
-		testEnvi.robot.navigate();
+		boolean solved = testEnvi.robot.navigate();
 
 		Rectangle goal = new Rectangle(testEnvi.goalPos.x - 25, testEnvi.goalPos.y - 25, 50, 50);
 		goal.setFill(Color.BLUE);
